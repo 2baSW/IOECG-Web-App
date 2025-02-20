@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.png";
+import logo from "../assets/IRD.png";
 
 import {
     HomeIcon,
@@ -38,9 +38,6 @@ const Header = () => {
                 {/* Bloc gauche : logo + titre */}
                 <div className="flex items-center space-x-4">
                     <img src={logo} alt="Logo" className="h-10 w-auto" />
-                    <span className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-            Institut de Recherche pour le Développement
-          </span>
                 </div>
 
                 {/* Bloc droit : boutons Thème, AF */}
@@ -58,7 +55,7 @@ const Header = () => {
                         )}
                     </button>
 
-                    {/* Bouton AF + menu déroulant */}
+                    {/* Bouton profil + menu déroulant */}
                     <div className="relative">
                         <button
                             onClick={toggleUserMenu}
@@ -83,7 +80,7 @@ const Header = () => {
                                         <button
                                             className="w-full text-left block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
                                             onClick={() => {
-                                                // Logique de déconnexion
+                                                // je dois ajouter ici la logique de déconnexion apres
                                                 console.log("Déconnexion");
                                             }}
                                         >
@@ -97,7 +94,7 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* --- Seconde rangée : Barre de navigation (icônes au-dessus du texte) --- */}
+            {/* --- Seconde rangée : Barre de navigation  --- */}
             <nav className="bg-gray-100 dark:bg-gray-700">
                 <div className="max-w-7xl mx-auto px-4">
                     <ul className="flex justify-evenly py-2">
