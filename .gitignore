@@ -37,6 +37,11 @@ hs_err_pid*
 /data/
 mongod.lock
 
+tailwind.css
+tailwind.css.map
+dist/tailwind.css
+dist/tailwind.css.map
+
 # === Docker ===
 *.dockerignore
 docker-compose.override.yml
