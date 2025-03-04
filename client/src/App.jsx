@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import CreateProjectButton from "./components/CreateProjectButton";
+import AnalysePage from "./pages/AnalysePage"
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
         <main className="flex-grow container mx-auto px-4">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/mes-projets" element={<div>Page Mes Projets</div>} />
+            <Route path="/mes-projets" element={<AnalysePage />} />
             <Route path="/a-propos" element={<div>Page À propos</div>} />
             <Route path="/support" element={<div>Page Support</div>} />
           </Routes>
