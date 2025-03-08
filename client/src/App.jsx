@@ -2,9 +2,14 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
-import CreateProjectButton from "./components/CreateProjectButton";
-import AnalysePage from "./pages/AnalysePage"
-import TemporaryComponent from "./components/TemporaryComponent";
+import LoginPage from "./pages/LoginPage";
+import AboutPage from "./pages/AboutPage";
+import SupportPage from "./pages/SupportPage";
+import ProfilPage from "./pages/ProfilPage";
+import CreateProjectPage from "./pages/CreateProjectPage";
+
+// Import du composant PrivateRoute
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -13,18 +18,56 @@ function App() {
         <Header />
         <main className="flex-grow container mx-auto px-4">
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/mes-projets" element={<TemporaryComponent />} />
-            <Route path="/a-propos" element={<div>Page À propos</div>} />
-            <Route path="/support" element={<div>Page Support</div>} />
+            {/* Route publique : /login */}
+            <Route path="/login" element={<LoginPage />} />
+
+            {/* Routes protégées : on enveloppe chaque page avec <PrivateRoute> */}
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <HomePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/a-propos"
+              element={
+                <PrivateRoute>
+                  <AboutPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/support"
+              element={
+                <PrivateRoute>
+                  <SupportPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/creer-projet"
+              element={
+                <PrivateRoute>
+                  <CreateProjectPage />
+                </PrivateRoute>
+              }
+            />
+            {/* La nouvelle route profil */}
+            <Route
+              path="/profil"
+              element={
+                <PrivateRoute>
+                  <ProfilPage />
+                </PrivateRoute>
+              }
+            />
           </Routes>
+          
         </main>
-        <Footer style={{ position: "relative" }}>
-          <CreateProjectButton />
-        </Footer>
+        <Footer />
       </Router>
-      <CreateProjectButton />
-    
     </div>
   );
 }

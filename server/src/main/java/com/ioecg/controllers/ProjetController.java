@@ -1,0 +1,114 @@
+package com.ioecg.controllers;
+
+import com.ioecg.dto.ProjectDTO;
+import com.ioecg.entities.Projet;
+import com.ioecg.entities.ProjetCollaborateur;
+import com.ioecg.entities.ProjetCollaborateurId;
+import com.ioecg.entities.ProjetDataset;
+import com.ioecg.entities.ProjetDatasetId;
+import com.ioecg.entities.ProjetModele;
+import com.ioecg.entities.ProjetModeleId;
+import com.ioecg.entities.Utilisateur;
+import com.ioecg.repositories.ProjetRepository;
+import com.ioecg.repositories.ProjetCollaborateurRepository;
+import com.ioecg.repositories.ProjetDatasetRepository;
+import com.ioecg.repositories.ProjetModeleRepository;
+import com.ioecg.repositories.UtilisateurRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/projects")
+@CrossOrigin(origins = "*")
+public class ProjetController {
+
+    @Autowired
+    private ProjetRepository projetRepository;
+    
+    @Autowired
+    private ProjetDatasetRepository projetDatasetRepository;
+    
+    @Autowired
+    private ProjetModeleRepository projetModeleRepository;
+    
+    @Autowired
+    private ProjetCollaborateurRepository projetCollaborateurRepository;
+
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
+
+    @GetMapping
+    public List<Projet> getAllProjects() {
+        return projetRepository.findAll();
+    }
+
+    @PostMapping("/full")
+    public Projet createProjectFull(@RequestBody ProjectDTO projectDTO) {
+        // 1) Création du projet
+        Projet projet = new Projet();
+        projet.setNom(projectDTO.getNom());
+        projet.setDescription(projectDTO.getDescription());
+        projet.setTypeProjet(projectDTO.getTypeProjet());
+        projet.setDateCreation(LocalDateTime.now());
+
+        // Récupération du créateur via son ID
+        if (projectDTO.getId_createur() != null) {
+            Utilisateur createur = utilisateurRepository.findById(projectDTO.getId_createur())
+                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable pour id_createur=" + projectDTO.getId_createur()));
+            projet.setCreateur(createur);
+        }
+
+        Projet savedProject = projetRepository.save(projet);
+
+        // 2) Association des datasets
+        if (projectDTO.getDatasets() != null) {
+            projectDTO.getDatasets().forEach(datasetId -> {
+                ProjetDatasetId pdId = new ProjetDatasetId(savedProject.getId(), datasetId);
+                ProjetDataset pd = new ProjetDataset(pdId);
+                projetDatasetRepository.save(pd);
+            });
+        }
+
+        // 3) Association des modèles
+        if (projectDTO.getModels() != null) {
+            projectDTO.getModels().forEach(modelId -> {
+                ProjetModeleId pmId = new ProjetModeleId(savedProject.getId(), modelId);
+                ProjetModele pm = new ProjetModele(pmId);
+                projetModeleRepository.save(pm);
+            });
+        }
+
+        // 4) Association des collaborateurs
+        if (projectDTO.getCollaborators() != null) {
+            projectDTO.getCollaborators().forEach(collab -> {
+                ProjetCollaborateurId pcId = new ProjetCollaborateurId(savedProject.getId(), collab.getId());
+                ProjetCollaborateur pc = new ProjetCollaborateur(pcId, collab.getAdmin());
+                projetCollaborateurRepository.save(pc);
+            });
+        }
+        return savedProject;
+    }
+
+    @GetMapping("/{id}")
+    public Projet getProjectById(@PathVariable Long id) {
+        return projetRepository.findById(id).orElse(null);
+    }
+
+    @PutMapping("/{id}")
+    public Projet updateProject(@PathVariable Long id, @RequestBody Projet projetData) {
+        return projetRepository.findById(id).map(existing -> {
+            existing.setNom(projetData.getNom());
+            existing.setDescription(projetData.getDescription());
+            existing.setTypeProjet(projetData.getTypeProjet());
+            return projetRepository.save(existing);
+        }).orElse(null);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProject(@PathVariable Long id) {
+        projetRepository.deleteById(id);
+    }
+}

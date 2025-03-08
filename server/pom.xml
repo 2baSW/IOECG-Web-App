@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Le parent Spring Boot gère les versions de toutes les dépendances (dont postgresql). -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.0.5</version> <!-- Adaptez à la version souhaitée -->
+    <relativePath/> <!-- Recherche dans le repo Maven central -->
+  </parent>
+
+  <groupId>com.ioecg</groupId>
+  <artifactId>server</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>IOECG Server</name>
+
+  <properties>
+    <!-- Version Java installée sur votre machine (11, 17, etc.) -->
+    <java.version>17</java.version>
+  </properties>
+
+  <dependencies>
+
+    <!-- Spring Boot Web (pour exposer des endpoints REST) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- Spring Data JPA (Hibernate) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <!-- Driver PostgreSQL (version gérée par le parent Spring Boot) -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Pour les tests unitaires et d'intégration -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Plugin Maven pour empaqueter l'application Spring Boot en .jar exécutable -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
