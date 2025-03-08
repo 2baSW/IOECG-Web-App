@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import plusIcon from "../assets/plus.png"; // Assurez-vous que le chemin est correct
+import plusIcon from "../assets/plus.png"; 
 
-// Importez vos modals (à créer séparément)
 import CreateProjectModal from "../components/CreateProjectModal";
 import CreateDatasetModal from "../components/CreateDatasetModal";
 import ExploreModelsModal from "../components/ExploreModelsModal";
@@ -13,6 +12,7 @@ const HomePage = () => {
 
   // État pour afficher le menu d'action (bouton "+")
   const [showCreateMenu, setShowCreateMenu] = useState(false);
+
   // États pour afficher chaque modal
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showDatasetModal, setShowDatasetModal] = useState(false);

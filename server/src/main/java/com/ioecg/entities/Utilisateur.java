@@ -22,12 +22,11 @@ public class Utilisateur {
     @Column(nullable = false)
     private String password;
 
-        // Un utilisateur peut créer plusieurs projets.
     @OneToMany(mappedBy = "createur", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference         // <<--- Empêche la boucle infinie
+    @JsonManagedReference      
     private List<Projet> projets;
 
-    // Un utilisateur peut lancer plusieurs exécutions (si Execution pointe vers Utilisateur)
+    // Un utilisateur peut lancer plusieurs exécutions
     @OneToMany(mappedBy = "executePar", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Execution> executions;
 

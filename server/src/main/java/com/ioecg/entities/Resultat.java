@@ -12,7 +12,7 @@ public class Resultat {
     private Long id;
 
     @Column(columnDefinition = "jsonb", nullable = false)
-    private String donnees; // Résultat d'exécution en JSON
+    private String donnees;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateCreation;

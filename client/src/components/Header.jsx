@@ -15,19 +15,21 @@ import {
 const Header = () => {
     // État pour le mode sombre
     const [darkMode, setDarkMode] = useState(false);
+
     // État pour le menu utilisateur
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+
     // État pour savoir si l'utilisateur est authentifié
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     
-    // Récupérer la localisation (pour éventuellement adapter la navigation)
+    // Récupérer la localisation 
     const location = useLocation();
 
     // Vérifier à chaque rendu si l'utilisateur est connecté
     useEffect(() => {
         const email = localStorage.getItem("userEmail");
         setIsAuthenticated(email !== null);
-    }, [location]); // si la localisation change, on recalcule
+    }, [location]);
 
     // Bascule mode clair / sombre
     const toggleDarkMode = () => {
@@ -35,14 +37,15 @@ const Header = () => {
         document.documentElement.classList.toggle("dark");
     };
 
-    // Ouvrir / fermer le menu utilisateur
+    // menu utilisateur
     const toggleUserMenu = () => {
         setUserMenuOpen(!userMenuOpen);
     };
 
-    // Logique de déconnexion
+    // Déconnexion
     const handleLogout = () => {
         localStorage.removeItem("userEmail");
+        localStorage.removeItem("userId");
         window.location.href = "/login";
     };
 
@@ -158,7 +161,7 @@ const Header = () => {
                                 </li>
                             </>
                         ) : (
-                            // Si non authentifié, on propose uniquement un lien vers la connexion
+                            // Si non authentifié => lien vers la connexion
                             <li className="flex flex-col items-center text-gray-600 dark:text-gray-200">
                                 <Link
                                     to="/login"

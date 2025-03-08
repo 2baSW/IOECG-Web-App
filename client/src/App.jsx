@@ -54,7 +54,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-            {/* La nouvelle route profil */}
             <Route
               path="/profil"
               element={

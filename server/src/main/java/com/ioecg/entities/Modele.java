@@ -15,7 +15,7 @@ public class Modele {
     private String version;
     private String description;
 
-    // Stocker le fichier exécutable (modèle) en texte
+    // ichier exécutable (modèle) en texte pour l'instant
     @Column(columnDefinition = "TEXT")
     private String fichier;
 

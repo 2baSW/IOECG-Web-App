@@ -21,13 +21,13 @@ public class Execution {
     @JoinColumn(name = "id_modele", nullable = false)
     private Modele modele;
 
-    // Optionnel : le résultat d'exécution
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_resultat")
     private Resultat resultat;
 
     @Column(columnDefinition = "jsonb")
-    private String metadonnees; // Par ex. configuration HPC, logs, etc.
+    private String metadonnees; 
 
     @Column(name = "etat_execution")
     private String etatExecution; // "En attente", "En cours", "Terminé", etc.

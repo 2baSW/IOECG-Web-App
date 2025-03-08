@@ -9,15 +9,12 @@ public class ProjetDataset {
     @EmbeddedId
     private ProjetDatasetId id;
 
-    // Constructeur par défaut pour JPA
     public ProjetDataset() {}
 
-    // Constructeur avec clé composite
     public ProjetDataset(ProjetDatasetId id) {
         this.id = id;
     }
 
-    // Optionnel : constructeur avec deux Longs
     public ProjetDataset(Long id_projet, Long id_dataset) {
         this.id = new ProjetDatasetId(id_projet, id_dataset);
     }

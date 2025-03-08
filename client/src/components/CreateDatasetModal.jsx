@@ -28,12 +28,10 @@ function CreateDatasetModal({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Nettoyer la chaîne pour enlever les espaces insécables éventuels
     const cleanedFichier = fichier
       .replace(/\u00A0/g, "")
       .replace(/\u202F/g, "");
 
-    // Optionnel : valider que c'est un JSON valide
     try {
       JSON.parse(cleanedFichier);
     } catch (error) {
@@ -47,7 +45,7 @@ function CreateDatasetModal({ onClose }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           nom,
-          fichier: cleanedFichier, // Envoi de la chaîne textuelle
+          fichier: cleanedFichier, 
         }),
       });
       if (!response.ok) {

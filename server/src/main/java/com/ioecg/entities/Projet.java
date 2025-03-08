@@ -26,7 +26,7 @@ public class Projet {
     // Le créateur du projet
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_createur", nullable = false)
-    @JsonBackReference          // <<--- Empêche la boucle infinie
+    @JsonBackReference          
     private Utilisateur createur;
 
     // Un projet peut avoir plusieurs expériences
