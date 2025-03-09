@@ -48,7 +48,8 @@ const ProfilePage = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-16 p-4 border rounded shadow-md bg-white">
+        // Forcer le fond blanc et le texte sombre
+        <div className="max-w-md mx-auto mt-16 p-4 border rounded shadow-md bg-white text-gray-800">
             <h1 className="text-2xl font-bold text-center mb-4">Mon Profil</h1>
 
             {error && <div className="bg-red-100 text-red-700 p-2 rounded mb-4">{error}</div>}

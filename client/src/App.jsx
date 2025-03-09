@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
@@ -6,22 +6,23 @@ import LoginPage from "./pages/LoginPage";
 import AboutPage from "./pages/AboutPage";
 import SupportPage from "./pages/SupportPage";
 import ProfilPage from "./pages/ProfilPage";
-import CreateProjectPage from "./pages/CreateProjectPage";
-
-// Import du composant PrivateRoute
+import ExploreModels from "./pages/ExploreModels";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
+    /**
+     * min-h-screen : la div occupe au moins la hauteur de la fenêtre
+     * flex flex-col : on empile Header, <main>, Footer en colonne
+     */
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <Router>
         <Header />
-        <main className="flex-grow container mx-auto px-4">
+        
+        {/* main avec flex-grow pour occuper tout l'espace disponible */}
+        <main className="flex-grow container mx-auto px-4 py-4">
           <Routes>
-            {/* Route publique : /login */}
             <Route path="/login" element={<LoginPage />} />
-
-            {/* Routes protégées : on enveloppe chaque page avec <PrivateRoute> */}
             <Route
               path="/"
               element={
@@ -47,14 +48,6 @@ function App() {
               }
             />
             <Route
-              path="/creer-projet"
-              element={
-                <PrivateRoute>
-                  <CreateProjectPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
               path="/profil"
               element={
                 <PrivateRoute>
@@ -62,9 +55,17 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/explore-models"
+              element={
+                <PrivateRoute>
+                  <ExploreModels />
+                </PrivateRoute>
+              }
+            />
           </Routes>
-          
         </main>
+
         <Footer />
       </Router>
     </div>
