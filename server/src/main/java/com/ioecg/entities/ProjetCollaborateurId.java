@@ -1,8 +1,8 @@
 package com.ioecg.entities;
 
+import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
-import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class ProjetCollaborateurId implements Serializable {
@@ -20,15 +20,12 @@ public class ProjetCollaborateurId implements Serializable {
     public Long getId_projet() {
         return id_projet;
     }
-
     public void setId_projet(Long id_projet) {
         this.id_projet = id_projet;
     }
-
     public Long getId_utilisateur() {
         return id_utilisateur;
     }
-
     public void setId_utilisateur(Long id_utilisateur) {
         this.id_utilisateur = id_utilisateur;
     }

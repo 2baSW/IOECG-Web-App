@@ -17,21 +17,10 @@ public class ProjetDatasetId implements Serializable {
         this.id_dataset = id_dataset;
     }
 
-    public Long getId_projet() {
-        return id_projet;
-    }
-
-    public void setId_projet(Long id_projet) {
-        this.id_projet = id_projet;
-    }
-
-    public Long getId_dataset() {
-        return id_dataset;
-    }
-
-    public void setId_dataset(Long id_dataset) {
-        this.id_dataset = id_dataset;
-    }
+    public Long getId_projet() { return id_projet; }
+    public void setId_projet(Long id_projet) { this.id_projet = id_projet; }
+    public Long getId_dataset() { return id_dataset; }
+    public void setId_dataset(Long id_dataset) { this.id_dataset = id_dataset; }
 
     @Override
     public boolean equals(Object o) {

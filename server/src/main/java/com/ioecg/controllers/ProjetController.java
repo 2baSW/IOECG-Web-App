@@ -1,19 +1,9 @@
 package com.ioecg.controllers;
 
 import com.ioecg.dto.ProjectDTO;
-import com.ioecg.entities.Projet;
-import com.ioecg.entities.ProjetCollaborateur;
-import com.ioecg.entities.ProjetCollaborateurId;
-import com.ioecg.entities.ProjetDataset;
-import com.ioecg.entities.ProjetDatasetId;
-import com.ioecg.entities.ProjetModele;
-import com.ioecg.entities.ProjetModeleId;
-import com.ioecg.entities.Utilisateur;
-import com.ioecg.repositories.ProjetRepository;
-import com.ioecg.repositories.ProjetCollaborateurRepository;
-import com.ioecg.repositories.ProjetDatasetRepository;
-import com.ioecg.repositories.ProjetModeleRepository;
-import com.ioecg.repositories.UtilisateurRepository;
+import com.ioecg.dto.CollaboratorDTO;
+import com.ioecg.entities.*;
+import com.ioecg.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +47,8 @@ public class ProjetController {
         // Récupération du créateur via son ID
         if (projectDTO.getId_createur() != null) {
             Utilisateur createur = utilisateurRepository.findById(projectDTO.getId_createur())
-                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable pour id_createur=" + projectDTO.getId_createur()));
+                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable pour id_createur=" 
+                                                            + projectDTO.getId_createur()));
             projet.setCreateur(createur);
         }
 
@@ -65,30 +56,37 @@ public class ProjetController {
 
         // 2) Association des datasets
         if (projectDTO.getDatasets() != null) {
-            projectDTO.getDatasets().forEach(datasetId -> {
+            for (Long datasetId : projectDTO.getDatasets()) {
                 ProjetDatasetId pdId = new ProjetDatasetId(savedProject.getId(), datasetId);
                 ProjetDataset pd = new ProjetDataset(pdId);
                 projetDatasetRepository.save(pd);
-            });
+            }
         }
 
         // 3) Association des modèles
         if (projectDTO.getModels() != null) {
-            projectDTO.getModels().forEach(modelId -> {
+            for (Long modelId : projectDTO.getModels()) {
                 ProjetModeleId pmId = new ProjetModeleId(savedProject.getId(), modelId);
                 ProjetModele pm = new ProjetModele(pmId);
                 projetModeleRepository.save(pm);
-            });
+            }
         }
 
         // 4) Association des collaborateurs
         if (projectDTO.getCollaborators() != null) {
-            projectDTO.getCollaborators().forEach(collab -> {
-                ProjetCollaborateurId pcId = new ProjetCollaborateurId(savedProject.getId(), collab.getId());
+            for (CollaboratorDTO collab : projectDTO.getCollaborators()) {
+                Long collaboratorId = collab.getId();
+
+                // Vérifier que le collaborateur existe
+                Utilisateur collabUser = utilisateurRepository.findById(collaboratorId)
+                        .orElseThrow(() -> new RuntimeException("Collaborateur introuvable : ID=" + collaboratorId));
+
+                ProjetCollaborateurId pcId = new ProjetCollaborateurId(savedProject.getId(), collaboratorId);
                 ProjetCollaborateur pc = new ProjetCollaborateur(pcId, collab.getAdmin());
                 projetCollaborateurRepository.save(pc);
-            });
+            }
         }
+
         return savedProject;
     }
 

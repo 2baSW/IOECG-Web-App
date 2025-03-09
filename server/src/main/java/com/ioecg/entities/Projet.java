@@ -3,8 +3,8 @@ package com.ioecg.entities;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "projet")
@@ -26,10 +26,10 @@ public class Projet {
     // Le créateur du projet
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_createur", nullable = false)
-    @JsonBackReference          
+    @JsonBackReference // Pour éviter une sérialisation récursive (vous pouvez utiliser une autre stratégie si besoin)
     private Utilisateur createur;
 
-    // Un projet peut avoir plusieurs expériences
+    // Un projet peut avoir plusieurs expériences (ici omis ou à compléter selon votre modèle)
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Experience> experiences;
 
@@ -47,8 +47,9 @@ public class Projet {
             inverseJoinColumns = @JoinColumn(name = "id_modele"))
     private List<Modele> modeles;
 
-    // Les collaborateurs du projet (association avec attribut "admin")
+    // Association avec les collaborateurs
     @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference  // Ce côté sera sérialisé
     private List<ProjetCollaborateur> collaborateurs;
 
     // Getters & Setters

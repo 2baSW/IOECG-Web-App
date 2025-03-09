@@ -10,11 +10,9 @@ public class ProjetModele {
     private ProjetModeleId id;
 
     public ProjetModele() {}
-
     public ProjetModele(ProjetModeleId id) {
         this.id = id;
     }
-
     public ProjetModele(Long id_projet, Long id_modele) {
         this.id = new ProjetModeleId(id_projet, id_modele);
     }
@@ -22,7 +20,6 @@ public class ProjetModele {
     public ProjetModeleId getId() {
         return id;
     }
-
     public void setId(ProjetModeleId id) {
         this.id = id;
     }

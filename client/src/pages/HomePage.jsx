@@ -25,34 +25,23 @@ const HomePage = () => {
         setLoading(false);
       }
     };
-
     fetchProjects();
   }, []);
 
   const toggleCreateMenu = () => setShowCreateMenu(!showCreateMenu);
-
-  const openProjectModal = () => {
-    setShowProjectModal(true);
-    setShowCreateMenu(false);
-  };
-
-  const openDatasetModal = () => {
-    setShowDatasetModal(true);
-    setShowCreateMenu(false);
-  };
+  const openProjectModal = () => { setShowProjectModal(true); setShowCreateMenu(false); };
+  const openDatasetModal = () => { setShowDatasetModal(true); setShowCreateMenu(false); };
 
   return (
     <div className="p-8 relative">
       <h1 className="text-2xl font-bold mb-6">Projets consultés récemment</h1>
 
       {loading && <div className="text-center py-4">Chargement des projets...</div>}
-
       {error && (
         <div className="bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200 px-4 py-3 rounded mb-4">
           Erreur : {error}
         </div>
       )}
-
       {!loading && !error && (
         <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
           <table className="min-w-full">
@@ -121,7 +110,6 @@ const HomePage = () => {
         )}
       </div>
 
-      {/* Modals */}
       {showProjectModal && <CreateProjectModal onClose={() => setShowProjectModal(false)} />}
       {showDatasetModal && <CreateDatasetModal onClose={() => setShowDatasetModal(false)} />}
     </div>

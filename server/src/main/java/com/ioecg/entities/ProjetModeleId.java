@@ -17,21 +17,10 @@ public class ProjetModeleId implements Serializable {
         this.id_modele = id_modele;
     }
 
-    public Long getId_projet() {
-        return id_projet;
-    }
-
-    public void setId_projet(Long id_projet) {
-        this.id_projet = id_projet;
-    }
-
-    public Long getId_modele() {
-        return id_modele;
-    }
-
-    public void setId_modele(Long id_modele) {
-        this.id_modele = id_modele;
-    }
+    public Long getId_projet() { return id_projet; }
+    public void setId_projet(Long id_projet) { this.id_projet = id_projet; }
+    public Long getId_modele() { return id_modele; }
+    public void setId_modele(Long id_modele) { this.id_modele = id_modele; }
 
     @Override
     public boolean equals(Object o) {
