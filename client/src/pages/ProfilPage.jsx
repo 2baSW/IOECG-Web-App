@@ -8,7 +8,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const email = localStorage.getItem("userEmail");
+            const email = sessionStorage.getItem("userEmail");
             if (!email) {
                 setError("Utilisateur non connecté.");
                 return;

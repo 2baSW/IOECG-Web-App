@@ -27,8 +27,8 @@ function LoginPage() {
       const user = await response.json();
 
       // Stocker l'email et l'ID pour l'authentification
-      localStorage.setItem("userEmail", user.email);
-      localStorage.setItem("userId", user.id);
+      sessionStorage.setItem("userEmail", user.email);
+      sessionStorage.setItem("userId", user.id);
 
       // Rediriger vers la page d'accueil
       navigate("/");

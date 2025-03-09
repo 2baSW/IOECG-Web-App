@@ -29,7 +29,7 @@ const Header = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const email = localStorage.getItem("userEmail");
+    const email = sessionStorage.getItem("userEmail");
     setIsAuthenticated(!!email);
 
     if (email) {
