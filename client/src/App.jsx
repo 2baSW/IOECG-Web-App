@@ -6,28 +6,33 @@ import LoginPage from "./pages/LoginPage";
 import AboutPage from "./pages/AboutPage";
 import SupportPage from "./pages/SupportPage";
 import ProfilPage from "./pages/ProfilPage";
-import ExploreModels from "./pages/ExploreModels";
+import ExploreModels from "./pages/ExploreModels"; // Importez votre composant ExploreModels
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
-    /**
-     * min-h-screen : la div occupe au moins la hauteur de la fenêtre
-     * flex flex-col : on empile Header, <main>, Footer en colonne
-     */
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <Router>
         <Header />
-        
-        {/* main avec flex-grow pour occuper tout l'espace disponible */}
         <main className="flex-grow container mx-auto px-4 py-4">
           <Routes>
+            {/* Route publique pour /login */}
             <Route path="/login" element={<LoginPage />} />
+
+            {/* Routes privées */}
             <Route
               path="/"
               element={
                 <PrivateRoute>
                   <HomePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/explore-models"
+              element={
+                <PrivateRoute>
+                  <ExploreModels />
                 </PrivateRoute>
               }
             />
@@ -55,17 +60,8 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/explore-models"
-              element={
-                <PrivateRoute>
-                  <ExploreModels />
-                </PrivateRoute>
-              }
-            />
           </Routes>
         </main>
-
         <Footer />
       </Router>
     </div>
