@@ -47,8 +47,7 @@ public class ProjetController {
         // Récupération du créateur via son ID
         if (projectDTO.getId_createur() != null) {
             Utilisateur createur = utilisateurRepository.findById(projectDTO.getId_createur())
-                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable pour id_createur=" 
-                                                            + projectDTO.getId_createur()));
+                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable pour id_createur=" + projectDTO.getId_createur()));
             projet.setCreateur(createur);
         }
 
@@ -56,33 +55,39 @@ public class ProjetController {
 
         // 2) Association des datasets
         if (projectDTO.getDatasets() != null) {
-            for (Long datasetId : projectDTO.getDatasets()) {
+            projectDTO.getDatasets().forEach(datasetId -> {
                 ProjetDatasetId pdId = new ProjetDatasetId(savedProject.getId(), datasetId);
                 ProjetDataset pd = new ProjetDataset(pdId);
                 projetDatasetRepository.save(pd);
-            }
+            });
         }
 
         // 3) Association des modèles
         if (projectDTO.getModels() != null) {
-            for (Long modelId : projectDTO.getModels()) {
+            projectDTO.getModels().forEach(modelId -> {
                 ProjetModeleId pmId = new ProjetModeleId(savedProject.getId(), modelId);
                 ProjetModele pm = new ProjetModele(pmId);
                 projetModeleRepository.save(pm);
-            }
+            });
         }
 
         // 4) Association des collaborateurs
         if (projectDTO.getCollaborators() != null) {
             for (CollaboratorDTO collab : projectDTO.getCollaborators()) {
                 Long collaboratorId = collab.getId();
+                // Vérifier que le collaborateur existe
+                Utilisateur collabUser = utilisateurRepository.findById(collaboratorId)
+                        .orElseThrow(() -> new RuntimeException("Collaborateur introuvable : ID=" + collaboratorId));
 
                 ProjetCollaborateurId pcId = new ProjetCollaborateurId(savedProject.getId(), collaboratorId);
-                ProjetCollaborateur pc = new ProjetCollaborateur(pcId, collab.getAdmin());
+                ProjetCollaborateur pc = new ProjetCollaborateur(pcId, collab.isAdmin());
+                // Renseigner les entités associées pour MapsId
+                pc.setProjet(savedProject);
+                pc.setUtilisateur(collabUser);
+
                 projetCollaborateurRepository.save(pc);
             }
         }
-
         return savedProject;
     }
 

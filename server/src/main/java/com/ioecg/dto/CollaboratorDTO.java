@@ -1,8 +1,8 @@
 package com.ioecg.dto;
 
 public class CollaboratorDTO {
-    public Long id;
-    public Boolean admin;
+    private Long id;
+    private boolean admin;
 
     public Long getId() {
         return id;
@@ -10,10 +10,10 @@ public class CollaboratorDTO {
     public void setId(Long id) {
         this.id = id;
     }
-    public Boolean getAdmin() {
+    public boolean isAdmin() {
         return admin;
     }
-    public void setAdmin(Boolean admin) {
+    public void setAdmin(boolean admin) {
         this.admin = admin;
     }
 }

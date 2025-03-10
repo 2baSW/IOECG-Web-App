@@ -2,9 +2,6 @@ package com.ioecg.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "projet")
@@ -15,45 +12,19 @@ public class Projet {
     private Long id;
 
     private String nom;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateCreation;
 
-    @Column(name = "type_projet", nullable = false)
-    private String typeProjet; // "Analyse" ou "Expérience"
+    private String typeProjet;
 
-    // Le créateur du projet
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_createur", nullable = false)
-    @JsonBackReference // Pour éviter une sérialisation récursive (vous pouvez utiliser une autre stratégie si besoin)
+    @JoinColumn(name = "id_createur")
     private Utilisateur createur;
 
-    // Un projet peut avoir plusieurs expériences (ici omis ou à compléter selon votre modèle)
-    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Experience> experiences;
-
-    // Association ManyToMany avec Dataset via la table "projet_dataset"
-    @ManyToMany
-    @JoinTable(name = "projet_dataset",
-            joinColumns = @JoinColumn(name = "id_projet"),
-            inverseJoinColumns = @JoinColumn(name = "id_dataset"))
-    private List<Dataset> datasets;
-
-    // Association ManyToMany avec Modele via la table "projet_modele"
-    @ManyToMany
-    @JoinTable(name = "projet_modele",
-            joinColumns = @JoinColumn(name = "id_projet"),
-            inverseJoinColumns = @JoinColumn(name = "id_modele"))
-    private List<Modele> modeles;
-
-    // Association avec les collaborateurs
-    @OneToMany(mappedBy = "projet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference  // Ce côté sera sérialisé
-    private List<ProjetCollaborateur> collaborateurs;
-
-    // Getters & Setters
-
+    // Getters et setters
     public Long getId() {
         return id;
     }
@@ -89,29 +60,5 @@ public class Projet {
     }
     public void setCreateur(Utilisateur createur) {
         this.createur = createur;
-    }
-    public List<Experience> getExperiences() {
-        return experiences;
-    }
-    public void setExperiences(List<Experience> experiences) {
-        this.experiences = experiences;
-    }
-    public List<Dataset> getDatasets() {
-        return datasets;
-    }
-    public void setDatasets(List<Dataset> datasets) {
-        this.datasets = datasets;
-    }
-    public List<Modele> getModeles() {
-        return modeles;
-    }
-    public void setModeles(List<Modele> modeles) {
-        this.modeles = modeles;
-    }
-    public List<ProjetCollaborateur> getCollaborateurs() {
-        return collaborateurs;
-    }
-    public void setCollaborateurs(List<ProjetCollaborateur> collaborateurs) {
-        this.collaborateurs = collaborateurs;
     }
 }

@@ -9,17 +9,19 @@ function CreateProjectModal({ onClose }) {
   const [typeProjet, setTypeProjet] = useState("Analyse");
   const [message, setMessage] = useState("");
 
+  // Sélections pour associations
   const [selectedDatasets, setSelectedDatasets] = useState([]);
   const [selectedModels, setSelectedModels] = useState([]);
   const [selectedCollaborators, setSelectedCollaborators] = useState([]);
 
+  // Contrôle des modaux d'exploration
   const [showDatasetSelector, setShowDatasetSelector] = useState(false);
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [showCollaboratorSelector, setShowCollaboratorSelector] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const id_createur = parseInt(sessionStorage.getItem("userId"));
+    const id_createur = parseInt(sessionStorage.getItem("userId")); // L'utilisateur connecté
     const projectDTO = {
       nom,
       description,
@@ -30,6 +32,7 @@ function CreateProjectModal({ onClose }) {
       collaborators: selectedCollaborators.map((u) => ({ id: u.id, admin: u.admin || false })),
     };
 
+    // Affichage dans la console pour vérification
     console.log("Sending projectDTO:", JSON.stringify(projectDTO));
 
     try {
@@ -42,6 +45,7 @@ function CreateProjectModal({ onClose }) {
         throw new Error("Erreur lors de la création du projet");
       }
       setMessage("Projet créé avec succès !");
+      // Réinitialisation du formulaire et des sélections
       setNom("");
       setDescription("");
       setTypeProjet("Analyse");
@@ -57,30 +61,59 @@ function CreateProjectModal({ onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 overflow-y-auto">
       <div className="bg-white text-gray-800 p-6 rounded shadow-md w-96 max-h-full overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">Créer un Projet</h2>
+
         {message && (
           <div className="bg-green-100 text-green-700 border border-green-400 p-2 rounded mb-4">
             {message}
           </div>
         )}
+
         <form onSubmit={handleSubmit}>
+          {/* Nom du projet */}
           <div className="mb-4">
             <label className="block font-semibold mb-1">Nom du Projet *</label>
-            <input type="text" className="w-full p-2 border rounded" value={nom} onChange={(e) => setNom(e.target.value)} required />
+            <input
+              type="text"
+              className="w-full p-2 border rounded"
+              value={nom}
+              onChange={(e) => setNom(e.target.value)}
+              required
+            />
           </div>
+          {/* Description */}
           <div className="mb-4">
             <label className="block font-semibold mb-1">Description du Projet *</label>
-            <textarea className="w-full p-2 border rounded" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} required />
+            <textarea
+              className="w-full p-2 border rounded"
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
           </div>
+          {/* Type de projet */}
           <div className="mb-4">
             <label className="block font-semibold mb-1">Type de Projet *</label>
-            <select className="w-full p-2 border rounded" value={typeProjet} onChange={(e) => { setTypeProjet(e.target.value); setSelectedModels([]); }}>
+            <select
+              className="w-full p-2 border rounded"
+              value={typeProjet}
+              onChange={(e) => {
+                setTypeProjet(e.target.value);
+                setSelectedModels([]); // Réinitialiser la sélection des modèles si le type change
+              }}
+            >
               <option value="Analyse">Analyse</option>
               <option value="Expérience">Expérience</option>
             </select>
           </div>
+          {/* Sélection du Dataset */}
           <div className="mb-4">
             <label className="block font-semibold mb-1">Sélectionner le Dataset *</label>
-            <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={() => setShowDatasetSelector(true)}>
+            <button
+              type="button"
+              className="px-4 py-2 bg-gray-300 rounded"
+              onClick={() => setShowDatasetSelector(true)}
+            >
               Explorer les Datasets
             </button>
             <div className="mt-2">
@@ -88,7 +121,12 @@ function CreateProjectModal({ onClose }) {
                 selectedDatasets.map((ds) => (
                   <div key={ds.id} className="p-1 border rounded mb-1 flex justify-between items-center">
                     <span>{ds.nom}</span>
-                    <button type="button" onClick={() => setSelectedDatasets(selectedDatasets.filter((d) => d.id !== ds.id))}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSelectedDatasets(selectedDatasets.filter((d) => d.id !== ds.id))
+                      }
+                    >
                       Supprimer
                     </button>
                   </div>
@@ -98,11 +136,16 @@ function CreateProjectModal({ onClose }) {
               )}
             </div>
           </div>
+          {/* Sélection du Modèle */}
           <div className="mb-4">
             <label className="block font-semibold mb-1">
               Sélectionner modèle(s) * {typeProjet === "Expérience" && "(1 seul modèle)"}
             </label>
-            <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={() => setShowModelSelector(true)}>
+            <button
+              type="button"
+              className="px-4 py-2 bg-gray-300 rounded"
+              onClick={() => setShowModelSelector(true)}
+            >
               Explorer les Modèles
             </button>
             <div className="mt-2">
@@ -110,7 +153,12 @@ function CreateProjectModal({ onClose }) {
                 selectedModels.map((m) => (
                   <div key={m.id} className="p-1 border rounded mb-1 flex justify-between items-center">
                     <span>{m.nom}</span>
-                    <button type="button" onClick={() => setSelectedModels(selectedModels.filter((model) => model.id !== m.id))}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSelectedModels(selectedModels.filter((model) => model.id !== m.id))
+                      }
+                    >
                       Supprimer
                     </button>
                   </div>
@@ -120,9 +168,14 @@ function CreateProjectModal({ onClose }) {
               )}
             </div>
           </div>
+          {/* Sélection des Collaborateurs */}
           <div className="mb-4">
             <label className="block font-semibold mb-1">Sélectionner collaborateur(s)</label>
-            <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={() => setShowCollaboratorSelector(true)}>
+            <button
+              type="button"
+              className="px-4 py-2 bg-gray-300 rounded"
+              onClick={() => setShowCollaboratorSelector(true)}
+            >
               Explorer les Collaborateurs
             </button>
             <div className="mt-2">
@@ -130,7 +183,12 @@ function CreateProjectModal({ onClose }) {
                 selectedCollaborators.map((c) => (
                   <div key={c.id} className="p-1 border rounded mb-1 flex justify-between items-center">
                     <span>{c.nom} {c.prenom}</span>
-                    <button type="button" onClick={() => setSelectedCollaborators(selectedCollaborators.filter((collab) => collab.id !== c.id))}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSelectedCollaborators(selectedCollaborators.filter((collab) => collab.id !== c.id))
+                      }
+                    >
                       Supprimer
                     </button>
                   </div>
@@ -141,11 +199,17 @@ function CreateProjectModal({ onClose }) {
             </div>
           </div>
           <div className="flex justify-end space-x-2">
-            <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>Annuler</button>
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">Créer</button>
+            <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>
+              Annuler
+            </button>
+            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+              Créer
+            </button>
           </div>
         </form>
       </div>
+
+      {/* Modaux d'exploration */}
       {showDatasetSelector && (
         <DatasetSelectorModal
           onClose={() => setShowDatasetSelector(false)}
@@ -176,6 +240,7 @@ function CreateProjectModal({ onClose }) {
           onClose={() => setShowCollaboratorSelector(false)}
           onSelect={(user) => {
             if (!selectedCollaborators.find((c) => c.id === user.id)) {
+              // Par défaut, admin est false
               setSelectedCollaborators([...selectedCollaborators, { ...user, admin: false }]);
             }
           }}

@@ -9,14 +9,14 @@ public class ProjetDataset {
     @EmbeddedId
     private ProjetDatasetId id;
 
-    public ProjetDataset() {}
+    public ProjetDataset() {
+    }
+
     public ProjetDataset(ProjetDatasetId id) {
         this.id = id;
     }
-    public ProjetDataset(Long id_projet, Long id_dataset) {
-        this.id = new ProjetDatasetId(id_projet, id_dataset);
-    }
 
+    // Getters et setters
     public ProjetDatasetId getId() {
         return id;
     }

@@ -46,18 +46,22 @@ public class UtilisateurController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                  .body(Collections.singletonMap("message", "Le mot de passe ne peut pas être vide"));
         }
+
         Optional<Utilisateur> optionalUser = utilisateurRepository.findById(id);
         if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                                  .body(Collections.singletonMap("message", "Utilisateur introuvable"));
         }
+
         Utilisateur user = optionalUser.get();
-        user.setPassword(req.getNewPassword());
+        user.setPassword(req.getNewPassword()); // ⚠️ Pensez au hachage en production
         utilisateurRepository.save(user);
+
         return ResponseEntity.ok(Collections.singletonMap("message", "Mot de passe mis à jour avec succès"));
     }
 }
 
+// DTO pour la mise à jour du mot de passe
 class PasswordUpdateRequest {
     private String newPassword;
     public String getNewPassword() { return newPassword; }

@@ -39,18 +39,24 @@ function DatasetSelectorModal({ onClose, onSelect }) {
           <div>Chargement...</div>
         ) : (
           <div className="overflow-y-auto max-h-64">
-            {filteredDatasets.map((dataset) => (
-              <div
-                key={dataset.id}
-                className="p-2 border-b hover:bg-gray-100 cursor-pointer"
-                onClick={() => { onSelect(dataset); onClose(); }}
-              >
-                {dataset.nom}
-              </div>
-            ))}
+            {filteredDatasets.length > 0 ? (
+              filteredDatasets.map((dataset) => (
+                <div
+                  key={dataset.id}
+                  className="p-2 border-b hover:bg-gray-100 cursor-pointer"
+                  onClick={() => { onSelect(dataset); onClose(); }}
+                >
+                  {dataset.nom}
+                </div>
+              ))
+            ) : (
+              <p>Aucun dataset trouvé</p>
+            )}
           </div>
         )}
-        <button onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded">Fermer</button>
+        <button onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded">
+          Fermer
+        </button>
       </div>
     </div>
   );

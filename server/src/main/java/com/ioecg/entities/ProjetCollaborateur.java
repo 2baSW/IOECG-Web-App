@@ -1,7 +1,6 @@
 package com.ioecg.entities;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "projet_collaborateur")
@@ -10,29 +9,36 @@ public class ProjetCollaborateur {
     @EmbeddedId
     private ProjetCollaborateurId id;
 
+    @Column(nullable = false)
     private boolean admin;
 
-    // Référence vers le projet – on l’ignore lors de la sérialisation pour éviter la boucle
+    // Association vers le projet (pour MapsId)
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("id_projet")
     @JoinColumn(name = "id_projet", insertable = false, updatable = false)
-    @JsonBackReference
     private Projet projet;
 
-    // Référence vers l’utilisateur collaborateur (sérialisation possible si nécessaire)
+    // Association vers l'utilisateur (pour MapsId)
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("id_utilisateur")
     @JoinColumn(name = "id_utilisateur", insertable = false, updatable = false)
-    private Utilisateur collaborateur;
+    private Utilisateur utilisateur;
 
-    // Constructeurs
-    public ProjetCollaborateur() {}
+    public ProjetCollaborateur() {
+        this.id = new ProjetCollaborateurId();
+    }
 
     public ProjetCollaborateur(ProjetCollaborateurId id, boolean admin) {
         this.id = id;
         this.admin = admin;
     }
 
-    // Getters & Setters
+    public ProjetCollaborateur(Long id_projet, Long id_utilisateur, boolean admin) {
+        this.id = new ProjetCollaborateurId(id_projet, id_utilisateur);
+        this.admin = admin;
+    }
 
+    // Getters et Setters
     public ProjetCollaborateurId getId() {
         return id;
     }
@@ -51,10 +57,10 @@ public class ProjetCollaborateur {
     public void setProjet(Projet projet) {
         this.projet = projet;
     }
-    public Utilisateur getCollaborateur() {
-        return collaborateur;
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
     }
-    public void setCollaborateur(Utilisateur collaborateur) {
-        this.collaborateur = collaborateur;
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
     }
 }

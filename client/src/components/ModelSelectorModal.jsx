@@ -39,18 +39,24 @@ function ModelSelectorModal({ onClose, onSelect, typeProjet }) {
           <div>Chargement...</div>
         ) : (
           <div className="overflow-y-auto max-h-64">
-            {filteredModels.map((model) => (
-              <div
-                key={model.id}
-                className="p-2 border-b hover:bg-gray-100 cursor-pointer"
-                onClick={() => { onSelect(model); onClose(); }}
-              >
-                {model.nom} {model.version ? `- v${model.version}` : ""}
-              </div>
-            ))}
+            {filteredModels.length > 0 ? (
+              filteredModels.map((model) => (
+                <div
+                  key={model.id}
+                  className="p-2 border-b hover:bg-gray-100 cursor-pointer"
+                  onClick={() => { onSelect(model); onClose(); }}
+                >
+                  {model.nom} {model.version ? `- v${model.version}` : ""}
+                </div>
+              ))
+            ) : (
+              <p>Aucun modèle trouvé</p>
+            )}
           </div>
         )}
-        <button onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded">Fermer</button>
+        <button onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded">
+          Fermer
+        </button>
       </div>
     </div>
   );
