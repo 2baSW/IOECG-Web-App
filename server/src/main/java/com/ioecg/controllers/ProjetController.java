@@ -77,10 +77,6 @@ public class ProjetController {
             for (CollaboratorDTO collab : projectDTO.getCollaborators()) {
                 Long collaboratorId = collab.getId();
 
-                // Vérifier que le collaborateur existe
-                Utilisateur collabUser = utilisateurRepository.findById(collaboratorId)
-                        .orElseThrow(() -> new RuntimeException("Collaborateur introuvable : ID=" + collaboratorId));
-
                 ProjetCollaborateurId pcId = new ProjetCollaborateurId(savedProject.getId(), collaboratorId);
                 ProjetCollaborateur pc = new ProjetCollaborateur(pcId, collab.getAdmin());
                 projetCollaborateurRepository.save(pc);
