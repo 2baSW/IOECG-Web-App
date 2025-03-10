@@ -49,14 +49,12 @@ public class ProjetController {
             dto.setDateCreation(projet.getDateCreation());
             dto.setTypeProjet(projet.getTypeProjet());
 
-            // Récupération du créateur (s'il existe)
+            // Récupération du créateur 
             if (projet.getCreateur() != null) {
                 dto.setCreateurNom(projet.getCreateur().getNom());
                 dto.setCreateurPrenom(projet.getCreateur().getPrenom());
             }
 
-            // Si vous voulez renvoyer les datasets ou modèles,
-            // vous pouvez les ajouter ici (ex. setDatasets(...))
 
             return dto;
         }).collect(Collectors.toList());
