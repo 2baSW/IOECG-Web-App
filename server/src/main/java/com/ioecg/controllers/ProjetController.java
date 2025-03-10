@@ -1,7 +1,8 @@
 package com.ioecg.controllers;
 
-import com.ioecg.dto.ProjectDTO;
 import com.ioecg.dto.CollaboratorDTO;
+import com.ioecg.dto.ProjectDTO;
+import com.ioecg.dto.ProjectResponseDTO;
 import com.ioecg.entities.*;
 import com.ioecg.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -30,11 +32,39 @@ public class ProjetController {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
+    /**
+     * Renvoie la liste de tous les projets
+     * sous forme d'une liste de ProjectResponseDTO
+     */
     @GetMapping
-    public List<Projet> getAllProjects() {
-        return projetRepository.findAll();
+    public List<ProjectResponseDTO> getAllProjects() {
+        List<Projet> projets = projetRepository.findAll();
+
+        // Transformer chaque Projet en ProjectResponseDTO
+        return projets.stream().map(projet -> {
+            ProjectResponseDTO dto = new ProjectResponseDTO();
+            dto.setId(projet.getId());
+            dto.setNom(projet.getNom());
+            dto.setDescription(projet.getDescription());
+            dto.setDateCreation(projet.getDateCreation());
+            dto.setTypeProjet(projet.getTypeProjet());
+
+            // Récupération du créateur (s'il existe)
+            if (projet.getCreateur() != null) {
+                dto.setCreateurNom(projet.getCreateur().getNom());
+                dto.setCreateurPrenom(projet.getCreateur().getPrenom());
+            }
+
+            // Si vous voulez renvoyer les datasets ou modèles,
+            // vous pouvez les ajouter ici (ex. setDatasets(...))
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
+    /**
+     * Création d'un projet complet (datasets, modèles, collaborateurs)
+     */
     @PostMapping("/full")
     public Projet createProjectFull(@RequestBody ProjectDTO projectDTO) {
         // 1) Création du projet
@@ -47,7 +77,8 @@ public class ProjetController {
         // Récupération du créateur via son ID
         if (projectDTO.getId_createur() != null) {
             Utilisateur createur = utilisateurRepository.findById(projectDTO.getId_createur())
-                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable pour id_createur=" + projectDTO.getId_createur()));
+                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable pour id_createur=" 
+                                                           + projectDTO.getId_createur()));
             projet.setCreateur(createur);
         }
 
@@ -81,6 +112,7 @@ public class ProjetController {
 
                 ProjetCollaborateurId pcId = new ProjetCollaborateurId(savedProject.getId(), collaboratorId);
                 ProjetCollaborateur pc = new ProjetCollaborateur(pcId, collab.isAdmin());
+
                 // Renseigner les entités associées pour MapsId
                 pc.setProjet(savedProject);
                 pc.setUtilisateur(collabUser);
@@ -91,11 +123,17 @@ public class ProjetController {
         return savedProject;
     }
 
+    /**
+     * Récupérer un projet par ID
+     */
     @GetMapping("/{id}")
     public Projet getProjectById(@PathVariable Long id) {
         return projetRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Mettre à jour un projet
+     */
     @PutMapping("/{id}")
     public Projet updateProject(@PathVariable Long id, @RequestBody Projet projetData) {
         return projetRepository.findById(id).map(existing -> {
@@ -106,6 +144,9 @@ public class ProjetController {
         }).orElse(null);
     }
 
+    /**
+     * Supprimer un projet
+     */
     @DeleteMapping("/{id}")
     public void deleteProject(@PathVariable Long id) {
         projetRepository.deleteById(id);
