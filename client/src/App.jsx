@@ -8,8 +8,6 @@ import SupportPage from "./pages/SupportPage";
 import ProfilPage from "./pages/ProfilPage";
 import ExploreModels from "./pages/ExploreModels"; // Importez votre composant ExploreModels
 import PrivateRoute from "./components/PrivateRoute";
-import AnalysePage from "./pages/AnalysePage";
-import ModelPage from "./pages/ModelPage";
 
 function App() {
   return (
@@ -62,8 +60,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route path="/projet/:id" element={<AnalysePage />} />
-            <Route path="/model/:id" element={<ModelPage />} />
           </Routes>
         </main>
         <Footer />
