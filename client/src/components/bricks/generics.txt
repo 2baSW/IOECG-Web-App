@@ -1,0 +1,1 @@
+Des composants génériques pour l'affichage avec seulement des listes en entrée 
