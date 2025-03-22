@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CreateProjectModal from "../components/CreateProjectModal";
 import CreateDatasetModal from "../components/CreateDatasetModal";
 import plusIcon from "../assets/plus.png";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const [projects, setProjects] = useState([]);
@@ -96,7 +97,9 @@ function HomePage() {
               {projects.map((project) => (
                 <tr key={project.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                    {project.nom}
+                    <Link to={`/projet/${project.id}`} className="hover:underline">
+                      {project.nom}
+                    </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {project.typeProjet}

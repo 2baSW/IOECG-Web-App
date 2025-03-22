@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const ExploreModels = () => {
   const [models, setModels] = useState([]);
@@ -65,7 +66,11 @@ const ExploreModels = () => {
             <tbody>
               {filteredModels.map((model) => (
                 <tr key={model.id}>
-                  <td className="border p-2">{model.nom}</td>
+                  <td className="border p-2 text-sm font-medium text-blue-600">
+                    <Link to={`/model/${model.id}`} className="hover:underline">
+                      {model.nom}
+                    </Link>
+                  </td>
                   <td className="border p-2">{model.version}</td>
                   <td className="border p-2">{model.description}</td>
                   <td className="border p-2">
