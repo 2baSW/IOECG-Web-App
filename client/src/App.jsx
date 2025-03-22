@@ -9,7 +9,6 @@ import ProfilPage from "./pages/ProfilPage";
 import ExploreModels from "./pages/ExploreModels"; // Importez votre composant ExploreModels
 import PrivateRoute from "./components/PrivateRoute";
 
-
 function App() {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -61,7 +60,6 @@ function App() {
                 </PrivateRoute>
               }
             />
-
           </Routes>
         </main>
         <Footer />
