@@ -32,8 +32,8 @@ const ModelPage = () =>
       fetchProjects();
     }, []);
 
-  const infosModel = [Model.version, Model.dateCreation,"null","null"];
-  const descriptionsModel=["null",Model.description, "null", "null","null"]; //statique
+  const infosModel = [Model.version, Model.dateCreation];
+  const descriptionsModel=[Model.description]; //statique
 
   return (
     <div id="Model">
@@ -50,9 +50,7 @@ const ModelPage = () =>
               Informations :
               [
                   "Version",
-                  "Date de publication",
-                  "Laboratoire d'entraînement",
-                  "Equipe d'entraînement",
+                  "Date de création",
               ],
               infosData: infosModel,
               
@@ -62,11 +60,7 @@ const ModelPage = () =>
             {...{
               Descriptions :
               [
-                  "Données d'entraînement utilisées",
                   "Description",
-                  "Cas d'utilisation",
-                  "Données entrée/sorties",
-                  "Publication scientifiques associées",
               ],
               DescData:descriptionsModel,
               
