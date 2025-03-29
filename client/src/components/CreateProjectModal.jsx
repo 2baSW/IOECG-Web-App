@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatasetSelectorModal from "./DatasetSelectorModal";
 import ModelSelectorModal from "./ModelSelectorModal";
 import CollaboratorSelectorModal from "./CollaboratorSelectorModal";
@@ -12,6 +12,7 @@ function CreateProjectModal({ onClose }) {
   // Sélections pour associations
   const [selectedDatasets, setSelectedDatasets] = useState([]);
   const [selectedModels, setSelectedModels] = useState([]);
+  // Chaque collaborateur aura la forme { id, nom, prenom, email, admin }
   const [selectedCollaborators, setSelectedCollaborators] = useState([]);
 
   // Contrôle des modaux d'exploration
@@ -19,9 +20,42 @@ function CreateProjectModal({ onClose }) {
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [showCollaboratorSelector, setShowCollaboratorSelector] = useState(false);
 
+  // Fonction pour modifier le droit admin d'un collaborateur sélectionné
+  const toggleCollaboratorAdmin = (collabId) => {
+    setSelectedCollaborators(prev =>
+      prev.map((collab) =>
+        collab.id === collabId ? { ...collab, admin: !collab.admin } : collab
+      )
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const id_createur = parseInt(sessionStorage.getItem("userId")); // L'utilisateur connecté
+    const id_createur = parseInt(sessionStorage.getItem("userId"));
+
+    // Assurez-vous d'ajouter le créateur comme collaborateur avec admin true s'il n'est pas déjà présent
+    const creatorAlreadySelected = selectedCollaborators.some(
+      (collab) => collab.id === id_createur
+    );
+    let collaboratorsFinal = [...selectedCollaborators];
+    if (!creatorAlreadySelected) {
+      // On suppose que le front récupère aussi le nom/prénom du créateur via son profil (ici simplifié)
+      const creator = {
+        id: id_createur,
+        // Pour l'affichage, on peut récupérer ces infos via sessionStorage ou autre,
+        // ici on met des valeurs par défaut.
+        nom: sessionStorage.getItem("userNom") || "",
+        prenom: sessionStorage.getItem("userPrenom") || "",
+        admin: true,
+      };
+      collaboratorsFinal = [creator, ...collaboratorsFinal];
+    } else {
+      // Si le créateur est déjà présent, on force admin à true
+      collaboratorsFinal = collaboratorsFinal.map((collab) =>
+        collab.id === id_createur ? { ...collab, admin: true } : collab
+      );
+    }
+
     const projectDTO = {
       nom,
       description,
@@ -29,10 +63,9 @@ function CreateProjectModal({ onClose }) {
       id_createur,
       datasets: selectedDatasets.map((d) => d.id),
       models: selectedModels.map((m) => m.id),
-      collaborators: selectedCollaborators.map((u) => ({ id: u.id, admin: u.admin || false })),
+      collaborators: collaboratorsFinal.map((u) => ({ id: u.id, admin: u.admin })),
     };
 
-    // Affichage dans la console pour vérification
     console.log("Sending projectDTO:", JSON.stringify(projectDTO));
 
     try {
@@ -45,7 +78,7 @@ function CreateProjectModal({ onClose }) {
         throw new Error("Erreur lors de la création du projet");
       }
       setMessage("Projet créé avec succès !");
-      // Réinitialisation du formulaire et des sélections
+      // Réinitialiser le formulaire et les sélections
       setNom("");
       setDescription("");
       setTypeProjet("Analyse");
@@ -69,7 +102,7 @@ function CreateProjectModal({ onClose }) {
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* Nom du projet */}
+          {/* Nom */}
           <div className="mb-4">
             <label className="block font-semibold mb-1">Nom du Projet *</label>
             <input
@@ -99,7 +132,7 @@ function CreateProjectModal({ onClose }) {
               value={typeProjet}
               onChange={(e) => {
                 setTypeProjet(e.target.value);
-                setSelectedModels([]); // Réinitialiser la sélection des modèles si le type change
+                setSelectedModels([]); // Réinitialiser les modèles si changement de type
               }}
             >
               <option value="Analyse">Analyse</option>
@@ -183,11 +216,22 @@ function CreateProjectModal({ onClose }) {
                 selectedCollaborators.map((c) => (
                   <div key={c.id} className="p-1 border rounded mb-1 flex justify-between items-center">
                     <span>{c.nom} {c.prenom}</span>
+                    {/* Checkbox pour définir le rôle admin */}
+                    <label className="flex items-center space-x-1">
+                      <input
+                        type="checkbox"
+                        checked={c.admin}
+                        onChange={() => toggleCollaboratorAdmin(c.id)}
+                        className="form-checkbox"
+                      />
+                      <span className="text-xs">Admin</span>
+                    </label>
                     <button
                       type="button"
                       onClick={() =>
                         setSelectedCollaborators(selectedCollaborators.filter((collab) => collab.id !== c.id))
                       }
+                      className="ml-2 text-red-600"
                     >
                       Supprimer
                     </button>
@@ -240,7 +284,7 @@ function CreateProjectModal({ onClose }) {
           onClose={() => setShowCollaboratorSelector(false)}
           onSelect={(user) => {
             if (!selectedCollaborators.find((c) => c.id === user.id)) {
-              // Par défaut, admin est false
+              // Par défaut, admin est false pour les collaborateurs sélectionnés
               setSelectedCollaborators([...selectedCollaborators, { ...user, admin: false }]);
             }
           }}
