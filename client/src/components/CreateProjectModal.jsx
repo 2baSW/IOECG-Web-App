@@ -104,8 +104,11 @@ function CreateProjectModal({ onClose }) {
         <form onSubmit={handleSubmit}>
           {/* Nom */}
           <div className="mb-4">
-            <label className="block font-semibold mb-1">Nom du Projet *</label>
+            <label htmlFor="projectName" className="block font-semibold mb-1">
+              Nom du Projet *
+            </label>
             <input
+              id="projectName"
               type="text"
               className="w-full p-2 border rounded"
               value={nom}
@@ -115,8 +118,11 @@ function CreateProjectModal({ onClose }) {
           </div>
           {/* Description */}
           <div className="mb-4">
-            <label className="block font-semibold mb-1">Description du Projet *</label>
+            <label htmlFor="projectDescription" className="block font-semibold mb-1">
+              Description du Projet *
+            </label>
             <textarea
+              id="projectDescription"
               className="w-full p-2 border rounded"
               rows={3}
               value={description}
@@ -126,8 +132,11 @@ function CreateProjectModal({ onClose }) {
           </div>
           {/* Type de projet */}
           <div className="mb-4">
-            <label className="block font-semibold mb-1">Type de Projet *</label>
+            <label htmlFor="projectType" className="block font-semibold mb-1">
+              Type de Projet *
+            </label>
             <select
+              id="projectType"
               className="w-full p-2 border rounded"
               value={typeProjet}
               onChange={(e) => {
@@ -141,8 +150,11 @@ function CreateProjectModal({ onClose }) {
           </div>
           {/* Sélection du Dataset */}
           <div className="mb-4">
-            <label className="block font-semibold mb-1">Sélectionner le Dataset *</label>
+            <label htmlFor="datasetSelector" className="block font-semibold mb-1">
+              Sélectionner le Dataset *
+            </label>
             <button
+              id="datasetSelector"
               type="button"
               className="px-4 py-2 bg-gray-300 rounded"
               onClick={() => setShowDatasetSelector(true)}
@@ -152,12 +164,17 @@ function CreateProjectModal({ onClose }) {
             <div className="mt-2">
               {selectedDatasets.length > 0 ? (
                 selectedDatasets.map((ds) => (
-                  <div key={ds.id} className="p-1 border rounded mb-1 flex justify-between items-center">
+                  <div
+                    key={ds.id}
+                    className="p-1 border rounded mb-1 flex justify-between items-center"
+                  >
                     <span>{ds.nom}</span>
                     <button
                       type="button"
                       onClick={() =>
-                        setSelectedDatasets(selectedDatasets.filter((d) => d.id !== ds.id))
+                        setSelectedDatasets(
+                          selectedDatasets.filter((d) => d.id !== ds.id)
+                        )
                       }
                     >
                       Supprimer
@@ -171,10 +188,12 @@ function CreateProjectModal({ onClose }) {
           </div>
           {/* Sélection du Modèle */}
           <div className="mb-4">
-            <label className="block font-semibold mb-1">
-              Sélectionner modèle(s) * {typeProjet === "Expérience" && "(1 seul modèle)"}
+            <label htmlFor="modelSelector" className="block font-semibold mb-1">
+              Sélectionner modèle(s) *{" "}
+              {typeProjet === "Expérience" && "(1 seul modèle)"}
             </label>
             <button
+              id="modelSelector"
               type="button"
               className="px-4 py-2 bg-gray-300 rounded"
               onClick={() => setShowModelSelector(true)}
@@ -184,12 +203,17 @@ function CreateProjectModal({ onClose }) {
             <div className="mt-2">
               {selectedModels.length > 0 ? (
                 selectedModels.map((m) => (
-                  <div key={m.id} className="p-1 border rounded mb-1 flex justify-between items-center">
+                  <div
+                    key={m.id}
+                    className="p-1 border rounded mb-1 flex justify-between items-center"
+                  >
                     <span>{m.nom}</span>
                     <button
                       type="button"
                       onClick={() =>
-                        setSelectedModels(selectedModels.filter((model) => model.id !== m.id))
+                        setSelectedModels(
+                          selectedModels.filter((model) => model.id !== m.id)
+                        )
                       }
                     >
                       Supprimer
@@ -203,8 +227,11 @@ function CreateProjectModal({ onClose }) {
           </div>
           {/* Sélection des Collaborateurs */}
           <div className="mb-4">
-            <label className="block font-semibold mb-1">Sélectionner collaborateur(s)</label>
+            <label htmlFor="collaboratorSelector" className="block font-semibold mb-1">
+              Sélectionner collaborateur(s)
+            </label>
             <button
+              id="collaboratorSelector"
               type="button"
               className="px-4 py-2 bg-gray-300 rounded"
               onClick={() => setShowCollaboratorSelector(true)}
@@ -214,8 +241,13 @@ function CreateProjectModal({ onClose }) {
             <div className="mt-2">
               {selectedCollaborators.length > 0 ? (
                 selectedCollaborators.map((c) => (
-                  <div key={c.id} className="p-1 border rounded mb-1 flex justify-between items-center">
-                    <span>{c.nom} {c.prenom}</span>
+                  <div
+                    key={c.id}
+                    className="p-1 border rounded mb-1 flex justify-between items-center"
+                  >
+                    <span>
+                      {c.nom} {c.prenom}
+                    </span>
                     {/* Checkbox pour définir le rôle admin */}
                     <label className="flex items-center space-x-1">
                       <input
@@ -229,7 +261,11 @@ function CreateProjectModal({ onClose }) {
                     <button
                       type="button"
                       onClick={() =>
-                        setSelectedCollaborators(selectedCollaborators.filter((collab) => collab.id !== c.id))
+                        setSelectedCollaborators(
+                          selectedCollaborators.filter(
+                            (collab) => collab.id !== c.id
+                          )
+                        )
                       }
                       className="ml-2 text-red-600"
                     >
@@ -243,10 +279,19 @@ function CreateProjectModal({ onClose }) {
             </div>
           </div>
           <div className="flex justify-end space-x-2">
-            <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={onClose}>
+            <button
+              type="button"
+              className="px-4 py-2 bg-gray-300 rounded"
+              onClick={onClose}
+              id="cancelButton"
+            >
               Annuler
             </button>
-            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              id="submitButton"
+            >
               Créer
             </button>
           </div>
