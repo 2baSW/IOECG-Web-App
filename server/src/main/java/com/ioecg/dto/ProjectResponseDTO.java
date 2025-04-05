@@ -12,10 +12,10 @@ public class ProjectResponseDTO {
     private String typeProjet;
     private String createurNom;
     private String createurPrenom;
-    // Nouveau champ pour la liste des collaborateurs
     private List<CollaboratorDTO> collaborators;
+    private List<ModeleDTO> modeles;
+    private List<DatasetDTO> datasets;
 
-    // Getters et setters
     public Long getId() {
         return id;
     }
@@ -63,5 +63,17 @@ public class ProjectResponseDTO {
     }
     public void setCollaborators(List<CollaboratorDTO> collaborators) {
         this.collaborators = collaborators;
+    }
+    public List<ModeleDTO> getModeles() {
+        return modeles;
+    }
+    public void setModeles(List<ModeleDTO> modeles) {
+        this.modeles = modeles;
+    }
+    public List<DatasetDTO> getDatasets() {
+        return datasets;
+    }
+    public void setDatasets(List<DatasetDTO> datasets) {
+        this.datasets = datasets;
     }
 }

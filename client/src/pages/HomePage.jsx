@@ -8,23 +8,19 @@ function HomePage() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedProject, setSelectedProject] = useState(null);
   const [showCreateMenu, setShowCreateMenu] = useState(false);
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showDatasetModal, setShowDatasetModal] = useState(false);
 
-  // Récupérer l'ID de l'utilisateur connecté
   const loggedUserId = parseInt(sessionStorage.getItem("userId"));
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const response = await fetch("http://localhost:8080/api/projects");
-        if (!response.ok) {
-          throw new Error("Serveur indisponible");
-        }
+        if (!response.ok) throw new Error("Serveur indisponible");
         const data = await response.json();
-        // Filtrer les projets pour ne garder que ceux où l'utilisateur est collaborateur
+        // Filtrer pour ne conserver que les projets où l'utilisateur connecté est collaborateur
         const filteredProjects = data.filter(
           (project) =>
             project.collaborators &&
@@ -55,14 +51,6 @@ function HomePage() {
     setShowCreateMenu(false);
   };
 
-  const handleShowDetails = (project) => {
-    setSelectedProject(project);
-  };
-
-  const handleCloseDetails = () => {
-    setSelectedProject(null);
-  };
-
   return (
     <div className="p-8 relative">
       <h1 className="text-2xl font-bold mb-6">Mes Projets</h1>
@@ -87,7 +75,7 @@ function HomePage() {
                   Créateur
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Détails
+                  Date de Création
                 </th>
               </tr>
             </thead>
@@ -95,7 +83,9 @@ function HomePage() {
               {projects.map((project) => (
                 <tr key={project.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                    {project.nom}
+                    <Link to={`/projects/${project.id}`} className="underline hover:text-blue-800">
+                      {project.nom}
+                    </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {project.typeProjet}
@@ -103,13 +93,8 @@ function HomePage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {project.createurNom} {project.createurPrenom}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button
-                      className="text-blue-600 hover:text-blue-900 underline"
-                      onClick={() => handleShowDetails(project)}
-                    >
-                      Détails
-                    </button>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(project.dateCreation).toLocaleDateString("fr-FR")}
                   </td>
                 </tr>
               ))}
@@ -117,6 +102,7 @@ function HomePage() {
           </table>
         </div>
       )}
+      {/* Bouton plus flottant */}
       <div className="fixed bottom-6 right-6 z-50">
         <img
           src={plusIcon}
@@ -146,38 +132,6 @@ function HomePage() {
       )}
       {showDatasetModal && (
         <CreateDatasetModal onClose={() => setShowDatasetModal(false)} />
-      )}
-      {selectedProject && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-md w-96 max-h-full overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Détails du projet</h2>
-            <p className="mb-2">
-              <strong>Nom :</strong> {selectedProject.nom}
-            </p>
-            <p className="mb-2">
-              <strong>Description :</strong> {selectedProject.description}
-            </p>
-            <p className="mb-2">
-              <strong>Date de création :</strong>{" "}
-              {selectedProject.dateCreation
-                ? new Date(selectedProject.dateCreation).toLocaleString()
-                : "N/A"}
-            </p>
-            <p className="mb-2">
-              <strong>Type de projet :</strong> {selectedProject.typeProjet}
-            </p>
-            <p className="mb-4">
-              <strong>Créateur :</strong>{" "}
-              {selectedProject.createurNom} {selectedProject.createurPrenom}
-            </p>
-            <button
-              className="mt-4 px-4 py-2 bg-gray-300 rounded"
-              onClick={handleCloseDetails}
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
       )}
     </div>
   );

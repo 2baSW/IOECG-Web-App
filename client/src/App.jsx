@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import AboutPage from "./pages/AboutPage";
 import SupportPage from "./pages/SupportPage";
 import ProfilPage from "./pages/ProfilPage";
+import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 import ExploreModels from "./pages/ExploreModels";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -16,15 +17,20 @@ function App() {
         <Header />
         <main className="flex-grow container mx-auto px-4 py-4">
           <Routes>
-            {/* Route publique pour /login */}
             <Route path="/login" element={<LoginPage />} />
-
-            {/* Routes privées */}
             <Route
               path="/"
               element={
                 <PrivateRoute>
                   <HomePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/projects/:id"
+              element={
+                <PrivateRoute>
+                  <ProjectDetailsPage />
                 </PrivateRoute>
               }
             />
@@ -69,4 +75,3 @@ function App() {
 }
 
 export default App;
-
