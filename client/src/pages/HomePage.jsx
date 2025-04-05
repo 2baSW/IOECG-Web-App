@@ -96,7 +96,7 @@ function HomePage() {
               {projects.map((project) => (
                 <tr key={project.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                    {project.nom}
+                      {project.nom}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {project.typeProjet}
@@ -122,6 +122,7 @@ function HomePage() {
       {/* Bouton flottant plus */}
       <div className="fixed bottom-6 right-6 z-50">
         <img
+          id = "PlusButton"
           src={plusIcon}
           alt="Créer"
           className="w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition cursor-pointer"
@@ -130,12 +131,14 @@ function HomePage() {
         {showCreateMenu && (
           <div className="absolute bottom-16 right-0 bg-white border rounded shadow-md p-2 w-48">
             <button
+              id = "CreateProjectButton"
               className="block w-full text-left px-4 py-2 hover:bg-gray-100"
               onClick={handleOpenProjectModal}
             >
               Créer un Projet
             </button>
             <button
+              id = "AddDadasetButton"
               className="block w-full text-left px-4 py-2 hover:bg-gray-100"
               onClick={handleOpenDatasetModal}
             >
