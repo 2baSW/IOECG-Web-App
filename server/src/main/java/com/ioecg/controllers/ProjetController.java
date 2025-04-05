@@ -32,15 +32,10 @@ public class ProjetController {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
-    /**
-     * Renvoie la liste de tous les projets
-     * sous forme d'une liste de ProjectResponseDTO
-     */
     @GetMapping
     public List<ProjectResponseDTO> getAllProjects() {
         List<Projet> projets = projetRepository.findAll();
 
-        // Transformer chaque Projet en ProjectResponseDTO
         return projets.stream().map(projet -> {
             ProjectResponseDTO dto = new ProjectResponseDTO();
             dto.setId(projet.getId());
@@ -48,14 +43,19 @@ public class ProjetController {
             dto.setDescription(projet.getDescription());
             dto.setDateCreation(projet.getDateCreation());
             dto.setTypeProjet(projet.getTypeProjet());
-
-            // Récupération du créateur 
             if (projet.getCreateur() != null) {
                 dto.setCreateurNom(projet.getCreateur().getNom());
                 dto.setCreateurPrenom(projet.getCreateur().getPrenom());
             }
-
-
+            // Récupérer la liste des collaborateurs via le repository
+            List<ProjetCollaborateur> collabs = projetCollaborateurRepository.findByProjetId(projet.getId());
+            List<CollaboratorDTO> collabDTOs = collabs.stream().map(pc -> {
+                CollaboratorDTO cDto = new CollaboratorDTO();
+                cDto.setId(pc.getUtilisateur().getId());
+                cDto.setAdmin(pc.isAdmin());
+                return cDto;
+            }).collect(Collectors.toList());
+            dto.setCollaborators(collabDTOs);
             return dto;
         }).collect(Collectors.toList());
     }
