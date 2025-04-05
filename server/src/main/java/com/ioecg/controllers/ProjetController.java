@@ -82,7 +82,7 @@ public class ProjetController {
 
         Projet savedProject = projetRepository.save(projet);
 
-        // 2) Association des datasets
+        // Association des datasets
         if (projectDTO.getDatasets() != null) {
             projectDTO.getDatasets().forEach(datasetId -> {
                 ProjetDatasetId pdId = new ProjetDatasetId(savedProject.getId(), datasetId);
@@ -91,7 +91,7 @@ public class ProjetController {
             });
         }
 
-        // 3) Association des modèles
+        // Association des modèles
         if (projectDTO.getModels() != null) {
             projectDTO.getModels().forEach(modelId -> {
                 ProjetModeleId pmId = new ProjetModeleId(savedProject.getId(), modelId);
@@ -100,7 +100,7 @@ public class ProjetController {
             });
         }
 
-        // 4) Association des collaborateurs
+        // Association des collaborateurs
         if (projectDTO.getCollaborators() != null) {
             for (CollaboratorDTO collab : projectDTO.getCollaborators()) {
                 Long collaboratorId = collab.getId();

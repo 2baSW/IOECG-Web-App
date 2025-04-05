@@ -6,7 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import AboutPage from "./pages/AboutPage";
 import SupportPage from "./pages/SupportPage";
 import ProfilPage from "./pages/ProfilPage";
-import ExploreModels from "./pages/ExploreModels"; // Importez votre composant ExploreModels
+import ExploreModels from "./pages/ExploreModels";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {

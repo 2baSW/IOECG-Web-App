@@ -25,5 +25,4 @@ public class ProjetCollaborateurController {
         projetCollaborateurRepository.deleteById(id);
     }
 
-    // Vous pouvez ajouter un endpoint pour mettre à jour le rôle (admin) d'un collaborateur
 }

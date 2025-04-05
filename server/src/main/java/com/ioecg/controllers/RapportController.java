@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class RapportController {
 
-    // Exemple d'endpoint pour générer un rapport PDF pour un projet donné
+    // endpoint pour générer un rapport PDF
 
 }

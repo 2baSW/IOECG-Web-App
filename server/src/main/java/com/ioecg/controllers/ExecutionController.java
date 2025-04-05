@@ -22,7 +22,7 @@ public class ExecutionController {
 
     @PostMapping
     public Execution createExecution(@RequestBody Execution execution) {
-        // Ici, vous pourriez intégrer la transmission de pipeline au HPC Scheduler
+        // pipeline au HPC Scheduler???
         return executionRepository.save(execution);
     }
 
@@ -37,7 +37,6 @@ public class ExecutionController {
             existing.setEtatExecution(execData.getEtatExecution());
             existing.setMetadonnees(execData.getMetadonnees());
             existing.setDateExecution(execData.getDateExecution());
-            // Mettez à jour d'autres champs si nécessaire
             return executionRepository.save(existing);
         }).orElse(null);
     }

@@ -37,7 +37,6 @@ public class Test1
         } catch (Exception e) {
             System.err.println("Erreur lors du chargement de la page : " + e.getMessage());
         } finally {
-            // Fermer le navigateur après utilisation
         	System.out.println("Fini !");
             pilote.quit();
         }
