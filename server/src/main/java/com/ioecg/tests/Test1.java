@@ -11,7 +11,7 @@ public class Test1
 	{
         ClassLoader classLoader = Test1.class.getClassLoader();
 		String email=null,mdp=null,url=null;
-		String fileName = "configtest/URL_Mail_MDP.txt";
+		String fileName = "configtests/URL_Mail_MDP.txt";
 
         try (InputStream is = classLoader.getResourceAsStream(fileName);
             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
