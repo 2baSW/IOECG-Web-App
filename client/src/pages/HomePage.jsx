@@ -52,9 +52,14 @@ function HomePage() {
   };
 
   return (
-    <div className="p-8 relative">
-      <h1 className="text-2xl font-bold mb-6">Mes Projets</h1>
-      {loading && <div className="text-center py-4">Chargement des projets...</div>}
+    <div className="pt-4 pb-8 px-4 relative">
+      <div className="flex flex-col items-center mb-4">
+        <h1 className="text-2xl font-bold text-center">Mes Projets</h1>
+      </div>
+
+      {loading && (
+        <div className="text-center py-4">Chargement des projets...</div>
+      )}
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           Erreur : {error}
@@ -83,7 +88,10 @@ function HomePage() {
               {projects.map((project) => (
                 <tr key={project.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                    <Link to={`/projects/${project.id}`} className="underline hover:text-blue-800">
+                    <Link
+                      to={`/projects/${project.id}`}
+                      className="underline hover:text-blue-800"
+                    >
                       {project.nom}
                     </Link>
                   </td>
@@ -102,6 +110,7 @@ function HomePage() {
           </table>
         </div>
       )}
+
       {/* Bouton plus flottant */}
       <div className="fixed bottom-6 right-6 z-50">
         <img
@@ -127,6 +136,8 @@ function HomePage() {
           </div>
         )}
       </div>
+
+      {/* Modales */}
       {showProjectModal && (
         <CreateProjectModal onClose={() => setShowProjectModal(false)} />
       )}
