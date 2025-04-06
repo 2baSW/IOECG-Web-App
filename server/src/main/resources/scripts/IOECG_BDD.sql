@@ -1,3 +1,8 @@
+--------------------------------------------------------------------
+-- pour crérer les tables de la base de données
+--   \i /path/IOECG_BDD.sql
+--------------------------------------------------------------------
+
 -- Supprimer les tables existantes
 DROP TABLE IF EXISTS execution CASCADE;
 DROP TABLE IF EXISTS resultat CASCADE;
