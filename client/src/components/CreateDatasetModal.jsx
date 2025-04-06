@@ -51,7 +51,6 @@ function CreateDatasetModal({ onClose }) {
       if (!response.ok) {
         throw new Error("Erreur lors de la création du dataset");
       }
-      // Fermer la modale et afficher un message de succès
       onClose();
       window.alert("Dataset créé avec succès !");
       window.location.reload();
@@ -63,11 +62,11 @@ function CreateDatasetModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white text-gray-800 p-6 rounded shadow-md w-96">
+      <div className="bg-white dark:bg-gray-800 dark:text-gray-100 p-6 rounded shadow-md w-96 border border-gray-200 dark:border-gray-700">
         <h2 className="text-xl font-bold mb-4">Ajouter un Dataset</h2>
 
         {message && (
-          <div className="bg-green-100 text-green-700 border border-green-400 p-2 rounded mb-4">
+          <div className="bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200 border border-green-400 dark:border-green-600 p-2 rounded mb-4">
             {message}
           </div>
         )}
@@ -77,7 +76,7 @@ function CreateDatasetModal({ onClose }) {
             <label className="block font-semibold mb-1">Nom du Dataset</label>
             <input
               type="text"
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
               value={nom}
               onChange={(e) => setNom(e.target.value)}
               required
@@ -93,7 +92,7 @@ function CreateDatasetModal({ onClose }) {
               className="mb-2"
             />
             <textarea
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
               rows={4}
               value={fichier}
               onChange={(e) => setFichier(e.target.value)}
@@ -104,14 +103,14 @@ function CreateDatasetModal({ onClose }) {
           <div className="flex justify-end space-x-2">
             <button
               type="button"
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-300 dark:bg-gray-700 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition"
               onClick={onClose}
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded hover:bg-blue-700 dark:hover:bg-blue-600 transition"
             >
               Créer
             </button>
