@@ -51,9 +51,11 @@ function CreateDatasetModal({ onClose }) {
       if (!response.ok) {
         throw new Error("Erreur lors de la création du dataset");
       }
-      setMessage("Dataset créé avec succès !");
-      setNom("");
-      setFichier("");
+      // Fermer la modale et afficher un message de succès
+      onClose();
+      window.alert("Dataset créé avec succès !");
+      window.location.reload();
+
     } catch (err) {
       setMessage(err.message);
     }

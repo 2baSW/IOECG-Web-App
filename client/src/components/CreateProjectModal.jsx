@@ -28,7 +28,7 @@ function CreateProjectModal({ onClose }) {
       )
     );
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const id_createur = parseInt(sessionStorage.getItem("userId"));
@@ -39,18 +39,15 @@ function CreateProjectModal({ onClose }) {
     );
     let collaboratorsFinal = [...selectedCollaborators];
     if (!creatorAlreadySelected) {
-      // On suppose que le front récupère aussi le nom/prénom du créateur via son profil (ici simplifié)
       const creator = {
         id: id_createur,
-        // Pour l'affichage, on peut récupérer ces infos via sessionStorage ou autre,
-        // ici on met des valeurs par défaut.
         nom: sessionStorage.getItem("userNom") || "",
         prenom: sessionStorage.getItem("userPrenom") || "",
         admin: true,
       };
       collaboratorsFinal = [creator, ...collaboratorsFinal];
     } else {
-      // Si le créateur est déjà présent, on force admin à true
+      // on force admin à true pour le créateur
       collaboratorsFinal = collaboratorsFinal.map((collab) =>
         collab.id === id_createur ? { ...collab, admin: true } : collab
       );
@@ -77,14 +74,13 @@ function CreateProjectModal({ onClose }) {
       if (!response.ok) {
         throw new Error("Erreur lors de la création du projet");
       }
-      setMessage("Projet créé avec succès !");
-      // Réinitialiser le formulaire et les sélections
-      setNom("");
-      setDescription("");
-      setTypeProjet("Analyse");
-      setSelectedDatasets([]);
-      setSelectedModels([]);
-      setSelectedCollaborators([]);
+
+      // Fermer et afficher un message de succès
+      onClose();
+      window.alert("Dataset créé avec succès !");
+      window.location.reload();
+
+
     } catch (err) {
       setMessage(err.message);
     }
