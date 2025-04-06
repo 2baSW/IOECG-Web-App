@@ -225,6 +225,7 @@ function HomePage() {
       {/* Bouton plus flottant */}
       <div className="fixed bottom-6 right-6 z-50">
         <img
+          id="PlusButton"
           src={plusIcon}
           alt="Créer"
           className="w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition cursor-pointer"
@@ -233,6 +234,7 @@ function HomePage() {
         {showCreateMenu && (
           <div className="absolute bottom-16 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded shadow-md p-2 w-48">
             <button
+              id="CreateProjectButton"
               className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200"
               onClick={handleOpenProjectModal}
             >
