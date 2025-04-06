@@ -16,7 +16,7 @@ const ExploreModels = () => {
     dateCreation: "",
   });
 
-  // --- Configuration du tri (asc, desc, etc.) ---
+  // --- Tri ---
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   useEffect(() => {
@@ -37,7 +37,6 @@ const ExploreModels = () => {
     fetchModels();
   }, []);
 
-  // Gère le clic sur l'en-tête pour trier
   const handleSort = (columnKey) => {
     if (sortConfig.key === columnKey) {
       // Cycle asc -> desc -> aucun tri
@@ -153,7 +152,6 @@ const ExploreModels = () => {
   };
 
   return (
-    // On applique des classes pour le dark mode
     <div className="pt-4 pb-8 px-4 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
       {/* Conteneur pour centrer le titre */}
       <div className="flex flex-col items-center mb-4">

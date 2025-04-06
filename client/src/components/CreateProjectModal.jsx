@@ -32,7 +32,6 @@ function CreateProjectModal({ onClose }) {
     e.preventDefault();
     const id_createur = parseInt(sessionStorage.getItem("userId"));
 
-    // Assurez-vous d'ajouter le créateur comme collaborateur admin s'il n'est pas déjà présent
     const creatorAlreadySelected = selectedCollaborators.some(
       (collab) => collab.id === id_createur
     );
@@ -131,7 +130,7 @@ function CreateProjectModal({ onClose }) {
               value={typeProjet}
               onChange={(e) => {
                 setTypeProjet(e.target.value);
-                setSelectedModels([]); // Réinitialiser si changement de type
+                setSelectedModels([]); 
               }}
             >
               <option value="Analyse">Analyse</option>

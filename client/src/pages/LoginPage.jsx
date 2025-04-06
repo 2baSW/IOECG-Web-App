@@ -23,7 +23,6 @@ function LoginPage() {
         throw new Error("Email ou mot de passe incorrect");
       }
 
-      // On suppose que le serveur renvoie un objet contenant au moins { id, email, ... }
       const user = await response.json();
 
       // Stocker l'email et l'ID pour l'authentification
