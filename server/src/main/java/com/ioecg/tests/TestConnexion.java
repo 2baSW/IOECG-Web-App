@@ -4,12 +4,12 @@ import java.io.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
-public class Test1
+public class TestConnexion
 {
 
 	public static void main(String argc[])
 	{
-        ClassLoader classLoader = Test1.class.getClassLoader();
+        ClassLoader classLoader = TestConnexion.class.getClassLoader();
 		String email=null,mdp=null,url=null;
 		String fileName = "configtests/URL_Mail_MDP.txt";
 
@@ -37,7 +37,12 @@ public class Test1
         } catch (Exception e) {
             System.err.println("Erreur lors du chargement de la page : " + e.getMessage());
         } finally {
-        	System.out.println("Fini !");
+            try {
+                Thread.sleep(5000); // Pause de 5 secondes
+            } catch (InterruptedException e) {
+                System.err.println("Erreur lors de la pause : " + e.getMessage());
+            }
+            System.out.println("Fini !");
             pilote.quit();
         }
 
