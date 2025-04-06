@@ -12,7 +12,6 @@ function CreateProjectModal({ onClose }) {
   // Sélections pour associations
   const [selectedDatasets, setSelectedDatasets] = useState([]);
   const [selectedModels, setSelectedModels] = useState([]);
-  // Chaque collaborateur aura la forme { id, nom, prenom, email, admin }
   const [selectedCollaborators, setSelectedCollaborators] = useState([]);
 
   // Contrôle des modaux d'exploration
@@ -20,9 +19,9 @@ function CreateProjectModal({ onClose }) {
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [showCollaboratorSelector, setShowCollaboratorSelector] = useState(false);
 
-  // Fonction pour modifier le droit admin d'un collaborateur sélectionné
+  // Modifier le droit admin pour un collaborateur sélectionné
   const toggleCollaboratorAdmin = (collabId) => {
-    setSelectedCollaborators(prev =>
+    setSelectedCollaborators((prev) =>
       prev.map((collab) =>
         collab.id === collabId ? { ...collab, admin: !collab.admin } : collab
       )
@@ -33,7 +32,7 @@ function CreateProjectModal({ onClose }) {
     e.preventDefault();
     const id_createur = parseInt(sessionStorage.getItem("userId"));
 
-    // Assurez-vous d'ajouter le créateur comme collaborateur avec admin true s'il n'est pas déjà présent
+    // Assurez-vous d'ajouter le créateur comme collaborateur admin s'il n'est pas déjà présent
     const creatorAlreadySelected = selectedCollaborators.some(
       (collab) => collab.id === id_createur
     );
@@ -47,7 +46,6 @@ function CreateProjectModal({ onClose }) {
       };
       collaboratorsFinal = [creator, ...collaboratorsFinal];
     } else {
-      // on force admin à true pour le créateur
       collaboratorsFinal = collaboratorsFinal.map((collab) =>
         collab.id === id_createur ? { ...collab, admin: true } : collab
       );
@@ -74,13 +72,9 @@ function CreateProjectModal({ onClose }) {
       if (!response.ok) {
         throw new Error("Erreur lors de la création du projet");
       }
-
-      // Fermer et afficher un message de succès
       onClose();
-      window.alert("Dataset créé avec succès !");
+      window.alert("Projet créé avec succès !");
       window.location.reload();
-
-
     } catch (err) {
       setMessage(err.message);
     }
@@ -88,11 +82,11 @@ function CreateProjectModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 overflow-y-auto">
-      <div className="bg-white text-gray-800 p-6 rounded shadow-md w-96 max-h-full overflow-y-auto">
+      <div className="bg-white dark:bg-gray-800 dark:text-gray-100 p-6 rounded shadow-md w-96 max-h-full overflow-y-auto border border-gray-200 dark:border-gray-700">
         <h2 className="text-xl font-bold mb-4">Créer un Projet</h2>
 
         {message && (
-          <div className="bg-green-100 text-green-700 border border-green-400 p-2 rounded mb-4">
+          <div className="bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200 border border-green-400 dark:border-green-600 p-2 rounded mb-4">
             {message}
           </div>
         )}
@@ -106,7 +100,7 @@ function CreateProjectModal({ onClose }) {
             <input
               id="projectName"
               type="text"
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
               value={nom}
               onChange={(e) => setNom(e.target.value)}
               required
@@ -119,7 +113,7 @@ function CreateProjectModal({ onClose }) {
             </label>
             <textarea
               id="projectDescription"
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -133,11 +127,11 @@ function CreateProjectModal({ onClose }) {
             </label>
             <select
               id="projectType"
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
               value={typeProjet}
               onChange={(e) => {
                 setTypeProjet(e.target.value);
-                setSelectedModels([]); // Réinitialiser les modèles si changement de type
+                setSelectedModels([]); // Réinitialiser si changement de type
               }}
             >
               <option value="Analyse">Analyse</option>
@@ -152,7 +146,7 @@ function CreateProjectModal({ onClose }) {
             <button
               id="datasetSelector"
               type="button"
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition"
               onClick={() => setShowDatasetSelector(true)}
             >
               Explorer les Datasets
@@ -162,16 +156,15 @@ function CreateProjectModal({ onClose }) {
                 selectedDatasets.map((ds) => (
                   <div
                     key={ds.id}
-                    className="p-1 border rounded mb-1 flex justify-between items-center"
+                    className="p-1 border rounded mb-1 flex justify-between items-center border-gray-300 dark:border-gray-600"
                   >
                     <span>{ds.nom}</span>
                     <button
                       type="button"
                       onClick={() =>
-                        setSelectedDatasets(
-                          selectedDatasets.filter((d) => d.id !== ds.id)
-                        )
+                        setSelectedDatasets(selectedDatasets.filter((d) => d.id !== ds.id))
                       }
+                      className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 transition"
                     >
                       Supprimer
                     </button>
@@ -185,13 +178,12 @@ function CreateProjectModal({ onClose }) {
           {/* Sélection du Modèle */}
           <div className="mb-4">
             <label htmlFor="modelSelector" className="block font-semibold mb-1">
-              Sélectionner modèle(s) *{" "}
-              {typeProjet === "Expérience" && "(1 seul modèle)"}
+              Sélectionner modèle(s) * {typeProjet === "Expérience" && "(1 seul modèle)"}
             </label>
             <button
               id="modelSelector"
               type="button"
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition"
               onClick={() => setShowModelSelector(true)}
             >
               Explorer les Modèles
@@ -201,16 +193,15 @@ function CreateProjectModal({ onClose }) {
                 selectedModels.map((m) => (
                   <div
                     key={m.id}
-                    className="p-1 border rounded mb-1 flex justify-between items-center"
+                    className="p-1 border rounded mb-1 flex justify-between items-center border-gray-300 dark:border-gray-600"
                   >
                     <span>{m.nom}</span>
                     <button
                       type="button"
                       onClick={() =>
-                        setSelectedModels(
-                          selectedModels.filter((model) => model.id !== m.id)
-                        )
+                        setSelectedModels(selectedModels.filter((model) => model.id !== m.id))
                       }
+                      className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 transition"
                     >
                       Supprimer
                     </button>
@@ -229,7 +220,7 @@ function CreateProjectModal({ onClose }) {
             <button
               id="collaboratorSelector"
               type="button"
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition"
               onClick={() => setShowCollaboratorSelector(true)}
             >
               Explorer les Collaborateurs
@@ -239,18 +230,17 @@ function CreateProjectModal({ onClose }) {
                 selectedCollaborators.map((c) => (
                   <div
                     key={c.id}
-                    className="p-1 border rounded mb-1 flex justify-between items-center"
+                    className="p-1 border rounded mb-1 flex justify-between items-center border-gray-300 dark:border-gray-600"
                   >
                     <span>
                       {c.nom} {c.prenom}
                     </span>
-                    {/* Checkbox pour définir le rôle admin */}
                     <label className="flex items-center space-x-1">
                       <input
                         type="checkbox"
                         checked={c.admin}
                         onChange={() => toggleCollaboratorAdmin(c.id)}
-                        className="form-checkbox"
+                        className="form-checkbox text-blue-600 dark:text-blue-400"
                       />
                       <span className="text-xs">Admin</span>
                     </label>
@@ -258,12 +248,10 @@ function CreateProjectModal({ onClose }) {
                       type="button"
                       onClick={() =>
                         setSelectedCollaborators(
-                          selectedCollaborators.filter(
-                            (collab) => collab.id !== c.id
-                          )
+                          selectedCollaborators.filter((collab) => collab.id !== c.id)
                         )
                       }
-                      className="ml-2 text-red-600"
+                      className="ml-2 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 transition"
                     >
                       Supprimer
                     </button>
@@ -277,7 +265,7 @@ function CreateProjectModal({ onClose }) {
           <div className="flex justify-end space-x-2">
             <button
               type="button"
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition"
               onClick={onClose}
               id="cancelButton"
             >
@@ -285,7 +273,7 @@ function CreateProjectModal({ onClose }) {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded hover:bg-blue-700 dark:hover:bg-blue-600 transition"
               id="submitButton"
             >
               Créer

@@ -21,6 +21,8 @@ function CollaboratorSelectorModal({ onClose, onSelect }) {
   }, []);
 
   const loggedUserId = parseInt(sessionStorage.getItem("userId"));
+
+  // Filtrer en excluant l'utilisateur connecté et en appliquant le search
   const filteredUsers = users
     .filter((user) => user.id !== loggedUserId)
     .filter((user) =>
@@ -30,15 +32,23 @@ function CollaboratorSelectorModal({ onClose, onSelect }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white p-4 rounded shadow-md w-11/12 max-w-lg">
+      {/* Conteneur du modal */}
+      <div className="bg-white dark:bg-gray-800 dark:text-gray-100
+                      p-4 rounded shadow-md w-11/12 max-w-lg
+                      border border-gray-200 dark:border-gray-600">
         <h2 className="text-xl font-bold mb-4">Explorer les Collaborateurs</h2>
+
         <input
           type="text"
           placeholder="Rechercher..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
+          className="w-full p-2 border rounded mb-4
+                     bg-white dark:bg-gray-700
+                     text-gray-800 dark:text-gray-200
+                     border-gray-300 dark:border-gray-500"
         />
+
         {loading ? (
           <div>Chargement...</div>
         ) : (
@@ -47,8 +57,13 @@ function CollaboratorSelectorModal({ onClose, onSelect }) {
               filteredUsers.map((user) => (
                 <div
                   key={user.id}
-                  className="p-2 border-b hover:bg-gray-100 cursor-pointer"
-                  onClick={() => { onSelect(user); onClose(); }}
+                  className="p-2 border-b dark:border-gray-600
+                             hover:bg-gray-100 dark:hover:bg-gray-700
+                             cursor-pointer transition"
+                  onClick={() => {
+                    onSelect(user);
+                    onClose();
+                  }}
                 >
                   {user.nom} {user.prenom} - {user.email}
                 </div>
@@ -58,7 +73,14 @@ function CollaboratorSelectorModal({ onClose, onSelect }) {
             )}
           </div>
         )}
-        <button onClick={onClose} className="mt-4 px-4 py-2 bg-gray-300 rounded">
+
+        <button
+          onClick={onClose}
+          className="mt-4 px-4 py-2 bg-gray-300
+                     dark:bg-gray-700 dark:text-gray-200
+                     hover:bg-gray-400 dark:hover:bg-gray-600
+                     rounded transition"
+        >
           Fermer
         </button>
       </div>
