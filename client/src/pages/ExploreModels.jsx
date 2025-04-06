@@ -99,7 +99,7 @@ const ExploreModels = () => {
         return false;
       }
       // Date de création (filtrage textuel simplifié)
-      const dateText = new Date(model.dateCreation).toLocaleString().toLowerCase();
+      const dateText = new Date(model.dateCreation).toLocaleDateString("fr-FR").toLowerCase();
       if (
         columnFilters.dateCreation &&
         !dateText.includes(columnFilters.dateCreation.toLowerCase())
@@ -257,7 +257,7 @@ const ExploreModels = () => {
                     {model.description}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {new Date(model.dateCreation).toLocaleString()}
+                    {new Date(model.dateCreation).toLocaleDateString("fr-FR")}
                   </td>
                 </tr>
               ))}
