@@ -1,15 +1,19 @@
 package com.ioecg.tests;
 import java.io.*;
+import java.time.Duration;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 public class Test2 {
 
 	public static void main(String argc[])
 	{
         ClassLoader classLoader = Test2.class.getClassLoader();
 		String email=null,mdp=null,url=null;
-		String fileName = "configtest/URL_Mail_MDP_NbProjets.txt";
+		String fileName = "configtests/URL_Mail_MDP_NbProjets.txt";
 		
 		int nombreProjets = 0;
         try (InputStream is = classLoader.getResourceAsStream(fileName);
@@ -24,6 +28,8 @@ public class Test2 {
         }
 		WebDriverManager.firefoxdriver().setup();
 		WebDriver pilote = new FirefoxDriver();
+	    pilote.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+		WebDriverWait wait = new WebDriverWait(pilote, Duration.ofSeconds(10));
 		try {
             // Essayer d'accéder à localhost:5173
             pilote.get(url);
@@ -33,13 +39,26 @@ public class Test2 {
     		WebElement ChampMDP = pilote.findElement(By.xpath("/html/body/div/div/main/div/form/div[2]/input"));
     		ChampMDP.sendKeys(mdp);
     		pilote.findElement(By.xpath("/html/body/div/div/main/div/form/button")).click();
-    		pilote.findElement(By.id("PlusButton")).click();
-			pilote.findElement(By.id("CreateProjectButton")).click();
+    
     		for(int i = 0; i<nombreProjets;i++)
     		{
+    			WebElement plusButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("PlusButton")));
+    		    
+    		    plusButton.click();
+    		    
+    		    WebElement createProjectButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("CreateProjectButton")));
+    		    createProjectButton.click();
+    			
+    			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("projectName")));
         		pilote.findElement(By.id("projectName")).sendKeys("nom test"+i);
         		pilote.findElement(By.id("projectDescription")).sendKeys("projet crée dans le cadre d'un test automatique ( test 2 )");
         		pilote.findElement(By.id("submitButton")).click();
+        		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+                alert.accept();  // Clique sur "OK"
+                //gérer le cas du reload
+                wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                        .executeScript("return document.readyState").equals("complete"));
+                wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("PlusButton")));
         		
     		}
 
