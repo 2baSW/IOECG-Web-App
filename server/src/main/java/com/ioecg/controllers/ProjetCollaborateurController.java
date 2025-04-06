@@ -2,7 +2,6 @@ package com.ioecg.controllers;
 
 import com.ioecg.entities.ProjetCollaborateur;
 import com.ioecg.entities.ProjetCollaborateurId;
-import com.ioecg.dto.AdminUpdateRequest;
 import com.ioecg.repositories.ProjetCollaborateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,31 +36,30 @@ public class ProjetCollaborateurController {
         projetCollaborateurRepository.save(pc);
         return ResponseEntity.ok().build();
     }
-
-
-    public class AdminUpdateRequest {
-        private Long projetId;
-        private Long utilisateurId;
-        private boolean admin;
     
-        public Long getProjetId() {
-            return projetId;
-        }
-        public void setProjetId(Long projetId) {
-            this.projetId = projetId;
-        }
-        public Long getUtilisateurId() {
-            return utilisateurId;
-        }
-        public void setUtilisateurId(Long utilisateurId) {
-            this.utilisateurId = utilisateurId;
-        }
-        public boolean isAdmin() {
-            return admin;
-        }
-        public void setAdmin(boolean admin) {
-            this.admin = admin;
-        }
+}
+
+class AdminUpdateRequest {
+    private Long projetId;
+    private Long utilisateurId;
+    private boolean admin;
+
+    public Long getProjetId() {
+        return projetId;
     }
-    
+    public void setProjetId(Long projetId) {
+        this.projetId = projetId;
+    }
+    public Long getUtilisateurId() {
+        return utilisateurId;
+    }
+    public void setUtilisateurId(Long utilisateurId) {
+        this.utilisateurId = utilisateurId;
+    }
+    public boolean isAdmin() {
+        return admin;
+    }
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
 }
