@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import CreateProjectModal from "../components/CreateProjectModal";
 import CreateDatasetModal from "../components/CreateDatasetModal";
@@ -11,6 +11,14 @@ function HomePage() {
   const [showCreateMenu, setShowCreateMenu] = useState(false);
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showDatasetModal, setShowDatasetModal] = useState(false);
+
+  // Filtres par colonne
+  const [columnFilters, setColumnFilters] = useState({
+    nom: "",
+    typeProjet: "",
+    createur: "",
+    dateCreation: "",
+  });
 
   const loggedUserId = parseInt(sessionStorage.getItem("userId"));
 
@@ -51,8 +59,56 @@ function HomePage() {
     setShowCreateMenu(false);
   };
 
+  // Gère la saisie des filtres par colonne
+  const handleColumnFilterChange = (columnKey, value) => {
+    setColumnFilters((prev) => ({ ...prev, [columnKey]: value }));
+  };
+
+  // Filtrer la liste de projets en fonction des colonnes
+  const filteredProjects = useMemo(() => {
+    return projects.filter((project) => {
+      // Filtrer par "Nom de Projet"
+      if (
+        columnFilters.nom &&
+        !project.nom?.toLowerCase().includes(columnFilters.nom.toLowerCase())
+      ) {
+        return false;
+      }
+      // Filtrer par "Type de Projet"
+      if (
+        columnFilters.typeProjet &&
+        !project.typeProjet
+          ?.toLowerCase()
+          .includes(columnFilters.typeProjet.toLowerCase())
+      ) {
+        return false;
+      }
+      // Filtrer par "Créateur"
+      const createurFullName = `${project.createurNom} ${project.createurPrenom}`.toLowerCase();
+      if (
+        columnFilters.createur &&
+        !createurFullName.includes(columnFilters.createur.toLowerCase())
+      ) {
+        return false;
+      }
+      // Filtrer par "Date de Création" (texte)
+      const dateText = new Date(project.dateCreation)
+        .toLocaleDateString("fr-FR")
+        .toLowerCase();
+      if (
+        columnFilters.dateCreation &&
+        !dateText.includes(columnFilters.dateCreation.toLowerCase())
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [projects, columnFilters]);
+
   return (
     <div className="pt-4 pb-8 px-4 relative">
+      {/* Conteneur pour centrer le titre */}
       <div className="flex flex-col items-center mb-4">
         <h1 className="text-2xl font-bold text-center">Mes Projets</h1>
       </div>
@@ -65,7 +121,8 @@ function HomePage() {
           Erreur : {error}
         </div>
       )}
-      {!loading && !error && projects.length > 0 && (
+
+      {!loading && !error && filteredProjects.length > 0 && (
         <div className="overflow-y-auto max-h-[70vh] rounded-lg border border-gray-200">
           <table className="min-w-full">
             <thead className="bg-gray-50 sticky top-0 z-10">
@@ -83,9 +140,57 @@ function HomePage() {
                   Date de Création
                 </th>
               </tr>
+              {/* Ligne de filtres par colonne */}
+              <tr className="bg-gray-100">
+                <th className="px-6 py-2">
+                  <input
+                    type="text"
+                    placeholder="Filtrer Nom..."
+                    value={columnFilters.nom}
+                    onChange={(e) =>
+                      handleColumnFilterChange("nom", e.target.value)
+                    }
+                    className="w-full p-1 border rounded"
+                  />
+                </th>
+                <th className="px-6 py-2">
+                  <input
+                    type="text"
+                    placeholder="Filtrer Type..."
+                    value={columnFilters.typeProjet}
+                    onChange={(e) =>
+                      handleColumnFilterChange("typeProjet", e.target.value)
+                    }
+                    className="w-full p-1 border rounded"
+                  />
+                </th>
+                <th className="px-6 py-2">
+                  <input
+                    type="text"
+                    placeholder="Filtrer Créateur..."
+                    value={columnFilters.createur}
+                    onChange={(e) =>
+                      handleColumnFilterChange("createur", e.target.value)
+                    }
+                    className="w-full p-1 border rounded"
+                  />
+                </th>
+                <th className="px-6 py-2">
+                  <input
+                    type="text"
+                    placeholder="Filtrer Date..."
+                    value={columnFilters.dateCreation}
+                    onChange={(e) =>
+                      handleColumnFilterChange("dateCreation", e.target.value)
+                    }
+                    className="w-full p-1 border rounded"
+                  />
+                </th>
+              </tr>
             </thead>
+
             <tbody className="bg-white divide-y divide-gray-200">
-              {projects.map((project) => (
+              {filteredProjects.map((project) => (
                 <tr key={project.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                     <Link
@@ -108,6 +213,13 @@ function HomePage() {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Si aucun projet ne correspond aux filtres */}
+      {!loading && !error && filteredProjects.length === 0 && (
+        <div className="mt-4 text-center text-gray-500">
+          Aucun projet ne correspond aux filtres.
         </div>
       )}
 
