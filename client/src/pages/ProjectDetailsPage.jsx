@@ -12,7 +12,6 @@ function ProjectDetailsPage() {
   const [error, setError] = useState(null);
   const loggedUserId = parseInt(sessionStorage.getItem("userId"));
 
-  // Contrôle des modaux pour assigner de nouveaux éléments
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [showDatasetSelector, setShowDatasetSelector] = useState(false);
   const [showCollaboratorSelector, setShowCollaboratorSelector] = useState(false);
@@ -33,11 +32,20 @@ function ProjectDetailsPage() {
     fetchProjectDetails();
   }, [id]);
 
-  if (loading) return <div className="p-8">Chargement du projet...</div>;
-  if (error) return <div className="p-8 bg-red-100 text-red-700">{error}</div>;
-  if (!project) return <div className="p-8">Projet introuvable</div>;
+  if (loading)
+    return <div className="p-8 dark:bg-gray-900 dark:text-gray-100 min-h-screen">Chargement du projet...</div>;
 
-  // Détermine si l'utilisateur connecté est le créateur ou un collaborateur admin
+  if (error)
+    return (
+      <div className="p-8 bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200 min-h-screen">
+        {error}
+      </div>
+    );
+
+  if (!project)
+    return <div className="p-8 dark:bg-gray-900 dark:text-gray-100 min-h-screen">Projet introuvable</div>;
+
+  // Droits
   const isCreator = project.createurId && loggedUserId === project.createurId;
   let isAdmin = isCreator;
   if (!isAdmin && project.collaborators) {
@@ -45,17 +53,19 @@ function ProjectDetailsPage() {
     if (me && me.admin) isAdmin = true;
   }
 
-  // Filtrer les collaborateurs pour ne pas afficher l'utilisateur connecté
+  // Filtrer les collabs (ne pas afficher l'utilisateur connecté)
   const displayedCollaborators = project.collaborators
     ? project.collaborators.filter((c) => c.id !== loggedUserId)
     : [];
 
+  // Handlers pour modèles
   const handleRemoveModel = async (modelId) => {
     if (!window.confirm("Supprimer ce modèle du projet ?")) return;
     try {
-      const response = await fetch(`http://localhost:8080/api/projects/${project.id}/models/${modelId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/projects/${project.id}/models/${modelId}`,
+        { method: "DELETE" }
+      );
       if (!response.ok) throw new Error("Erreur lors de la suppression du modèle");
       setProject({
         ...project,
@@ -80,12 +90,14 @@ function ProjectDetailsPage() {
     }
   };
 
+  // Handlers pour datasets
   const handleRemoveDataset = async (datasetId) => {
     if (!window.confirm("Supprimer ce dataset du projet ?")) return;
     try {
-      const response = await fetch(`http://localhost:8080/api/projects/${project.id}/datasets/${datasetId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/projects/${project.id}/datasets/${datasetId}`,
+        { method: "DELETE" }
+      );
       if (!response.ok) throw new Error("Erreur lors de la suppression du dataset");
       setProject({
         ...project,
@@ -110,12 +122,14 @@ function ProjectDetailsPage() {
     }
   };
 
+  // Handlers pour collaborateurs
   const handleRemoveCollaborator = async (collabId) => {
     if (!window.confirm("Supprimer ce collaborateur du projet ?")) return;
     try {
-      const response = await fetch(`http://localhost:8080/api/project-collaborators/${project.id}/${collabId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/project-collaborators/${project.id}/${collabId}`,
+        { method: "DELETE" }
+      );
       if (!response.ok) throw new Error("Erreur lors de la suppression du collaborateur");
       setProject({
         ...project,
@@ -156,7 +170,7 @@ function ProjectDetailsPage() {
         body: JSON.stringify({
           projetId: project.id,
           utilisateurId: collabId,
-          admin: !currentAdmin
+          admin: !currentAdmin,
         }),
       });
       if (!response.ok) throw new Error("Impossible de mettre à jour le droit admin");
@@ -171,6 +185,7 @@ function ProjectDetailsPage() {
     }
   };
 
+  // Suppression du projet
   const handleDeleteProject = async () => {
     if (!window.confirm("Voulez-vous vraiment supprimer ce projet ?")) return;
     try {
@@ -186,12 +201,21 @@ function ProjectDetailsPage() {
   };
 
   return (
-    <div className="p-8">
-      <Link to="/" className="underline text-blue-600 mb-4 inline-block">← Retour</Link>
+    <div className="p-8 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+      <Link to="/" className="underline text-blue-600 dark:text-blue-400 mb-4 inline-block">
+        ← Retour
+      </Link>
       <h1 className="text-2xl font-bold mb-4">{project.nom}</h1>
-      <p className="mb-2"><strong>Créateur :</strong> {project.createurNom} {project.createurPrenom}</p>
-      <p className="mb-2"><strong>Date de création :</strong> {new Date(project.dateCreation).toLocaleDateString()}</p>
-      <p className="mb-2"><strong>Type :</strong> {project.typeProjet}</p>
+      <p className="mb-2">
+        <strong>Créateur :</strong> {project.createurNom} {project.createurPrenom}
+      </p>
+      <p className="mb-2">
+        <strong>Date de création :</strong>{" "}
+        {new Date(project.dateCreation).toLocaleDateString()}
+      </p>
+      <p className="mb-2">
+        <strong>Type :</strong> {project.typeProjet}
+      </p>
       <div className="my-4">
         <h2 className="text-lg font-semibold mb-2">Description :</h2>
         <p>{project.description}</p>
@@ -201,22 +225,23 @@ function ProjectDetailsPage() {
       <div className="my-4">
         <h2 className="text-lg font-semibold mb-2">Collaborateurs :</h2>
         {displayedCollaborators && displayedCollaborators.length > 0 ? (
-          <ul>
+          <ul className="space-y-1">
             {displayedCollaborators.map((c) => (
               <li key={c.id} className="flex items-center space-x-2">
-                <span>{c.nom} {c.prenom} - {c.email}</span>
-                <span>({c.admin ? "Admin" : "Collaborateur"})</span>
+                <span>
+                  {c.nom} {c.prenom} - {c.email} ({c.admin ? "Admin" : "Collaborateur"})
+                </span>
                 {isAdmin && (
                   <>
                     <button
                       onClick={() => handleToggleCollaboratorAdmin(c.id, c.admin)}
-                      className="underline text-blue-600 text-xs"
+                      className="underline text-blue-600 dark:text-blue-400 text-xs hover:text-blue-800 dark:hover:text-blue-200"
                     >
                       {c.admin ? "Retirer admin" : "Rendre admin"}
                     </button>
                     <button
                       onClick={() => handleRemoveCollaborator(c.id)}
-                      className="underline text-red-600 text-xs"
+                      className="underline text-red-600 dark:text-red-400 text-xs hover:text-red-800 dark:hover:text-red-200"
                     >
                       Supprimer
                     </button>
@@ -231,7 +256,7 @@ function ProjectDetailsPage() {
         {isAdmin && (
           <button
             onClick={() => setShowCollaboratorSelector(true)}
-            className="mt-2 px-4 py-2 bg-gray-200 rounded"
+            className="mt-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
           >
             Ajouter un collaborateur
           </button>
@@ -242,14 +267,16 @@ function ProjectDetailsPage() {
       <div className="my-4">
         <h2 className="text-lg font-semibold mb-2">Modèles :</h2>
         {project.modeles && project.modeles.length > 0 ? (
-          <ul>
+          <ul className="space-y-1">
             {project.modeles.map((m) => (
               <li key={m.id} className="flex items-center space-x-2">
-                <span>{m.nom} {m.version && `- v${m.version}`}</span>
+                <span>
+                  {m.nom} {m.version && `- v${m.version}`}
+                </span>
                 {isAdmin && (
                   <button
                     onClick={() => handleRemoveModel(m.id)}
-                    className="underline text-red-600 text-xs"
+                    className="underline text-red-600 dark:text-red-400 text-xs hover:text-red-800 dark:hover:text-red-200"
                   >
                     Supprimer
                   </button>
@@ -263,7 +290,7 @@ function ProjectDetailsPage() {
         {isAdmin && (
           <button
             onClick={() => setShowModelSelector(true)}
-            className="mt-2 px-4 py-2 bg-gray-200 rounded"
+            className="mt-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
           >
             Ajouter un modèle
           </button>
@@ -274,14 +301,14 @@ function ProjectDetailsPage() {
       <div className="my-4">
         <h2 className="text-lg font-semibold mb-2">Datasets :</h2>
         {project.datasets && project.datasets.length > 0 ? (
-          <ul>
+          <ul className="space-y-1">
             {project.datasets.map((ds) => (
               <li key={ds.id} className="flex items-center space-x-2">
                 <span>{ds.nom}</span>
                 {isAdmin && (
                   <button
                     onClick={() => handleRemoveDataset(ds.id)}
-                    className="underline text-red-600 text-xs"
+                    className="underline text-red-600 dark:text-red-400 text-xs hover:text-red-800 dark:hover:text-red-200"
                   >
                     Supprimer
                   </button>
@@ -295,7 +322,7 @@ function ProjectDetailsPage() {
         {isAdmin && (
           <button
             onClick={() => setShowDatasetSelector(true)}
-            className="mt-2 px-4 py-2 bg-gray-200 rounded"
+            className="mt-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition"
           >
             Ajouter un dataset
           </button>
@@ -306,7 +333,7 @@ function ProjectDetailsPage() {
         <div className="mt-6">
           <button
             onClick={handleDeleteProject}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+            className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white px-4 py-2 rounded transition"
           >
             Supprimer le projet
           </button>
@@ -325,6 +352,7 @@ function ProjectDetailsPage() {
           }}
         />
       )}
+
       {showDatasetSelector && (
         <DatasetSelectorModal
           onClose={() => setShowDatasetSelector(false)}
@@ -336,6 +364,7 @@ function ProjectDetailsPage() {
           }}
         />
       )}
+
       {showCollaboratorSelector && (
         <CollaboratorSelectorModal
           onClose={() => setShowCollaboratorSelector(false)}
