@@ -1,10 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const ExploreModels = () => {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  // Etat pour les filtres par colonne
+  const [filters, setFilters] = useState({
+    nom: "",
+    version: "",
+    description: "",
+    dateCreation: "",
+  });
+  // Etat pour le tri
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "ascending" });
 
   useEffect(() => {
     const fetchModels = async () => {
@@ -24,30 +32,75 @@ const ExploreModels = () => {
     fetchModels();
   }, []);
 
-  // Filtrer les modèles selon le champ de recherche
+  // Filtrer les modèles selon les filtres par colonne
   const filteredModels = models.filter((model) => {
-    const query = searchQuery.toLowerCase();
-    return (
-      model.nom.toLowerCase().includes(query) ||
-      (model.version && model.version.toLowerCase().includes(query)) ||
-      (model.description && model.description.toLowerCase().includes(query))
-    );
+    for (let key in filters) {
+      if (filters[key]) {
+        let value = model[key];
+        // Pour la date, on convertit en chaîne lisible
+        if (key === "dateCreation") {
+          value = new Date(value).toLocaleString();
+        }
+        if (!value.toString().toLowerCase().includes(filters[key].toLowerCase())) {
+          return false;
+        }
+      }
+    }
+    return true;
   });
+
+  // Tri sur les modèles filtrés
+  const sortedModels = useMemo(() => {
+    const sortableModels = [...filteredModels];
+    if (sortConfig.key !== null) {
+      sortableModels.sort((a, b) => {
+        let aValue = a[sortConfig.key];
+        let bValue = b[sortConfig.key];
+
+        if (sortConfig.key === "dateCreation") {
+          aValue = new Date(aValue);
+          bValue = new Date(bValue);
+        } else {
+          if (typeof aValue === "string") aValue = aValue.toLowerCase();
+          if (typeof bValue === "string") bValue = bValue.toLowerCase();
+        }
+
+        if (aValue < bValue) return sortConfig.direction === "ascending" ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === "ascending" ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortableModels;
+  }, [filteredModels, sortConfig]);
+
+  // Gérer le clic sur un en-tête pour trier
+  const handleSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  // Indicateur visuel pour le tri
+  const renderSortArrow = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "ascending" ? " ↑" : " ↓";
+    }
+    return "";
+  };
+
+  // Mettre à jour le filtre pour une colonne donnée
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
   return (
     <div className="p-8">
       <h2 className="text-2xl font-bold mb-4">Catalogue des modèles</h2>
-
-      {/* Champ de recherche */}
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Rechercher..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-      </div>
 
       {loading && <div>Chargement...</div>}
       {error && <div className="text-red-600 mb-4">{error}</div>}
@@ -55,15 +108,75 @@ const ExploreModels = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse">
             <thead>
+              {/* Ligne d'en-têtes pour le tri */}
               <tr>
-                <th className="border p-2 text-left">Nom</th>
-                <th className="border p-2 text-left">Version</th>
-                <th className="border p-2 text-left">Description</th>
-                <th className="border p-2 text-left">Date de Création</th>
+                <th
+                  className="border p-2 text-left cursor-pointer select-none"
+                  onClick={() => handleSort("nom")}
+                >
+                  Nom{renderSortArrow("nom")}
+                </th>
+                <th
+                  className="border p-2 text-left cursor-pointer select-none"
+                  onClick={() => handleSort("version")}
+                >
+                  Version{renderSortArrow("version")}
+                </th>
+                <th
+                  className="border p-2 text-left cursor-pointer select-none"
+                  onClick={() => handleSort("description")}
+                >
+                  Description{renderSortArrow("description")}
+                </th>
+                <th
+                  className="border p-2 text-left cursor-pointer select-none"
+                  onClick={() => handleSort("dateCreation")}
+                >
+                  Date de Création{renderSortArrow("dateCreation")}
+                </th>
+              </tr>
+              {/* Ligne de filtres par colonne */}
+              <tr>
+                <th className="border p-2">
+                  <input
+                    type="text"
+                    placeholder="Filtrer"
+                    value={filters.nom}
+                    onChange={(e) => handleFilterChange("nom", e.target.value)}
+                    className="w-full p-1 border rounded"
+                  />
+                </th>
+                <th className="border p-2">
+                  <input
+                    type="text"
+                    placeholder="Filtrer"
+                    value={filters.version}
+                    onChange={(e) => handleFilterChange("version", e.target.value)}
+                    className="w-full p-1 border rounded"
+                  />
+                </th>
+                <th className="border p-2">
+                  <input
+                    type="text"
+                    placeholder="Filtrer"
+                    value={filters.description}
+                    onChange={(e) => handleFilterChange("description", e.target.value)}
+                    className="w-full p-1 border rounded"
+                  />
+                </th>
+                <th className="border p-2">
+                  <input
+                    type="text"
+                    placeholder="Filtrer"
+                    value={filters.dateCreation}
+                    onChange={(e) => handleFilterChange("dateCreation", e.target.value)}
+                    className="w-full p-1 border rounded"
+                  />
+                </th>
               </tr>
             </thead>
             <tbody>
-              {filteredModels.map((model) => (
+              {sortedModels.map((model) => (
                 <tr key={model.id}>
                   <td className="border p-2">{model.nom}</td>
                   <td className="border p-2">{model.version}</td>
