@@ -19,5 +19,5 @@ mvn spring-boot:run
 ```
 
 # Base de données
-Le scrip de création de la base de donnée (IOECG_BDD.sql) est dans le dossier **server** pour l'instant la base de données PostgreSQL est à créer en local.
+Les scrips de création de la base de donnée (IOECG_BDD.sql) et d'insertion d'un modèle dans le dossier **resources/scripts** pour l'instant la base de données PostgreSQL est à créer en local.
 Après création de la BDD, il faudra mettre à jour les paramètre de connection à la base dans le fichier pom.xml qui se trouve dans le dossier **server** aussi.
