@@ -68,8 +68,8 @@ const Header = () => {
 
   // Déconnexion
   const handleLogout = () => {
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userId");
+    sessionStorage.removeItem("userEmail");
+    sessionStorage.removeItem("userId");
     window.location.href = "/login";
   };
 
