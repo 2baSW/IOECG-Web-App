@@ -6,6 +6,7 @@ Ce dossier concerne le dévellopement frontend.
 Pour lancer l'application côté client, positionnez-vous dans ce dossier et exécutez la commande suivante :
 
 ```bash
+npm install //pour la première fois
 npm run dev
 ```
 
