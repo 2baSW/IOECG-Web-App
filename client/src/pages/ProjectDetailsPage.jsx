@@ -227,27 +227,41 @@ function ProjectDetailsPage() {
         {displayedCollaborators && displayedCollaborators.length > 0 ? (
           <ul className="space-y-1">
             {displayedCollaborators.map((c) => (
-              <li key={c.id} className="flex items-center space-x-2">
-                <span>
-                  {c.nom} {c.prenom} - {c.email} ({c.admin ? "Admin" : "Collaborateur"})
-                </span>
-                {isAdmin && (
+              <>
+              <tr key={c.id} className="border border-gray-800 dark:border-gray-800  ">
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition ">
+                  {c.nom} {c.prenom} 
+                </td>
+                  <th className="w-full text-left px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition ">
+                    {c.email} ({c.admin ? "Admin" : "Collaborateur"})
+                  </th>
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition ">
+                   
+                  {isAdmin && (
                   <>
                     <button
                       onClick={() => handleToggleCollaboratorAdmin(c.id, c.admin)}
-                      className="underline text-blue-600 dark:text-blue-400 text-xs hover:text-blue-800 dark:hover:text-blue-200"
+                      className="text-xs text-center text-white bg-blue-500 py-1 px-3 rounded-full"
                     >
                       {c.admin ? "Retirer admin" : "Rendre admin"}
                     </button>
-                    <button
+                  </>
+                  )}
+                </td>
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                {isAdmin && (
+                <button
+                  
                       onClick={() => handleRemoveCollaborator(c.id)}
-                      className="underline text-red-600 dark:text-red-400 text-xs hover:text-red-800 dark:hover:text-red-200"
+                      className="text-xs text-center text-white bg-red-500 py-1 px-3 rounded-full"
                     >
                       Supprimer
                     </button>
-                  </>
-                )}
-              </li>
+                  )}
+                </td>
+              </tr>
+
+              </>
             ))}
           </ul>
         ) : (
@@ -269,19 +283,27 @@ function ProjectDetailsPage() {
         {project.modeles && project.modeles.length > 0 ? (
           <ul className="space-y-1">
             {project.modeles.map((m) => (
-              <li key={m.id} className="flex items-center space-x-2">
-                <span>
-                  {m.nom} {m.version && `- v${m.version}`}
-                </span>
-                {isAdmin && (
-                  <button
-                    onClick={() => handleRemoveModel(m.id)}
-                    className="underline text-red-600 dark:text-red-400 text-xs hover:text-red-800 dark:hover:text-red-200"
-                  >
-                    Supprimer
-                  </button>
-                )}
-              </li>
+              <>
+              <tr key={m.id} className="border border-gray-800 dark:border-gray-800">
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                  {m.nom} 
+                </td>
+                  <th className="w-full text-left px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    {m.version && `- v${m.version}`}
+                  </th>
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                   
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleRemoveModel(m.id)}
+                      className="text-xs text-center text-white bg-red-500 py-1 px-3 rounded-full"
+                    >
+                      Supprimer
+                    </button>
+                  )}
+                </td>
+              </tr>
+              </>
             ))}
           </ul>
         ) : (
@@ -303,17 +325,28 @@ function ProjectDetailsPage() {
         {project.datasets && project.datasets.length > 0 ? (
           <ul className="space-y-1">
             {project.datasets.map((ds) => (
-              <li key={ds.id} className="flex items-center space-x-2">
-                <span>{ds.nom}</span>
-                {isAdmin && (
-                  <button
-                    onClick={() => handleRemoveDataset(ds.id)}
-                    className="underline text-red-600 dark:text-red-400 text-xs hover:text-red-800 dark:hover:text-red-200"
-                  >
-                    Supprimer
-                  </button>
-                )}
-              </li>
+              
+              <tr key={ds.id} className="border border-gray-800 dark:border-gray-800">
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                  {ds.nom} 
+                </td>
+                  <th className="w-full text-left px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+
+                  </th>
+                <td className="px-6 py-4 font-medium text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                   
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleRemoveDataset(ds.id)}
+                      className="text-xs text-center text-white bg-red-500 py-1 px-3 rounded-full"
+                    >
+                      Supprimer
+                    </button>
+                  )}
+                </td>
+              </tr>
+              
+
             ))}
           </ul>
         ) : (
@@ -379,5 +412,8 @@ function ProjectDetailsPage() {
     </div>
   );
 }
+
+export default ProjectDetailsPage;
+
 
 export default ProjectDetailsPage;
