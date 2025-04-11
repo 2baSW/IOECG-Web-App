@@ -23,6 +23,7 @@ https://maven.apache.org/install.html
 Pour lancer l'application côté serveur, positionnez-vous dans ce dossier et exécutez la commande suivante :
 
 ```bash
+mvn clean install
 mvn spring-boot:run
 ```
 
