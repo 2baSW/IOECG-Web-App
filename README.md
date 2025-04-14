@@ -8,8 +8,8 @@ Projet académique de développement d'une application web permettant l'exécuti
 
 ```bash
 git clone https://github.com/2baSW/IOECG-Web-App.git
-cd IOECG-Web-App
 ```
+Positionez vous au dossier "IOECG-Web-App" après.
 
 ---
 
