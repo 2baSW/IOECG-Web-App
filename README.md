@@ -25,56 +25,6 @@ Pour chaque partie, suivez les détails pour l'installation.
 
 ---
 
-## Dossier "client" (Frontend)
-
-Ce dossier contient l'interface utilisateur.
-
-### Prérequis
-
-- **Node.js & npm**
-
-Si vous n'avez pas encore Node.js et npm, vous pouvez les installer en suivant le guide d'installation : [Installation Node.js et npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-
-### Installation et démarrage
-
-Depuis le dossier `client` :
-
-```bash
-npm install
-npm run dev
-```
-
-Accédez ensuite à l'application frontend sur :
-
-```
-http://localhost:5173
-```
-
----
-
-## Dossier "server" (Backend)
-
-Ce dossier contient l'API REST développée avec Spring Boot et Java 17.
-
-### Prérequis
-
-- Java 17 (OpenJDK)
-- Maven
-
-Si Maven n'est pas installé, suivez le guide d'installation suivant :  
-[Installation Maven](https://maven.apache.org/install.html)
-
-### Installation et démarrage du serveur
-
-Depuis le dossier `server` :
-
-```bash
-mvn clean install
-mvn spring-boot:run
-```
-
----
-
 ## Base de données PostgreSQL
 
 ### Prérequis
@@ -115,12 +65,58 @@ psql -U postgres -d ioecg_db -f server/src/main/resources/scripts/insertModeles.
 
 ---
 
-## Configuration Spring Boot
+## Dossier "server" (Backend)
+
+Ce dossier contient l'API REST développée avec Spring Boot et Java 17.
+
+### Prérequis
+
+- Java 17 (OpenJDK)
+- Maven
+
+Si Maven n'est pas installé, suivez le guide d'installation suivant :  
+[Installation Maven](https://maven.apache.org/install.html)
+
+### Installation et démarrage du serveur
+
+Depuis le dossier `server` :
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
 
 Si vous avez modifié les paramètres de connexion lors de la création de la base, adaptez en conséquence le fichier `application.properties` situé dans :
 
 ```
 server/src/main/resources/
+```
+
+---
+
+## Dossier "client" (Frontend)
+
+Ce dossier contient l'interface utilisateur.
+
+### Prérequis
+
+- **Node.js & npm**
+
+Si vous n'avez pas encore Node.js et npm, vous pouvez les installer en suivant le guide d'installation : [Installation Node.js et npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
+### Installation et démarrage
+
+Depuis le dossier `client` ouvrez un terminal et tapez les commandes:
+
+```bash
+npm install
+npm run dev
+```
+
+Accédez ensuite à l'application frontend sur :
+
+```
+http://localhost:5173
 ```
 
 ---
