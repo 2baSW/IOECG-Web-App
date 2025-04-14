@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExecutionRepository extends JpaRepository<Execution, Long> {
-    // Vous pouvez ajouter des méthodes pour rechercher par statut ou par expérience
+    // à compléter
 }

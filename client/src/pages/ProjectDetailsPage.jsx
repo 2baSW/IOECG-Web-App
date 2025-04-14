@@ -414,6 +414,3 @@ function ProjectDetailsPage() {
 }
 
 export default ProjectDetailsPage;
-
-
-export default ProjectDetailsPage;

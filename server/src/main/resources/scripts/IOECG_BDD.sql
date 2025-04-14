@@ -1,5 +1,5 @@
 --------------------------------------------------------------------
--- pour crérer les tables de la base de données
+-- pour créer les tables de la base de données
 --   \i /path/IOECG_BDD.sql
 --------------------------------------------------------------------
 

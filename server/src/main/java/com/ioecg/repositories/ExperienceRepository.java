@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExperienceRepository extends JpaRepository<Experience, Long> {
-    // Méthodes de recherche par projet, par statut, etc.
+    // à compléter
 }

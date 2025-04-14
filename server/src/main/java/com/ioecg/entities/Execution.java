@@ -30,7 +30,7 @@ public class Execution {
     private String metadonnees; 
 
     @Column(name = "etat_execution")
-    private String etatExecution; // "En attente", "En cours", "Terminé", etc.
+    private String etatExecution; // "En attente", "En cours", "Terminé"
 
     @Column(name = "date_execution")
     private LocalDateTime dateExecution; // Date/heure de lancement

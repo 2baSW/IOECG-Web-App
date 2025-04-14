@@ -5,12 +5,11 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- Le parent Spring Boot gère les versions de toutes les dépendances (dont postgresql). -->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.0.5</version> <!-- Adaptez à la version souhaitée -->
-    <relativePath/> <!-- Recherche dans le repo Maven central -->
+    <version>3.0.5</version> 
+    <relativePath/> 
   </parent>
 
   <groupId>com.ioecg</groupId>
@@ -21,7 +20,7 @@
   <name>IOECG Server</name>
 
   <properties>
-    <!-- Version Java installée sur votre machine (11, 17, etc.) -->
+    <!-- Version Java 17 -->
     <java.version>17</java.version>
   </properties>
 
