@@ -1,6 +1,6 @@
 # IOECG-Web-App
 
-Projet académique de développement d'une application web permettant l'exécution et la gestion de modèles de deep learning sur des données ECG.
+Projet académique de développement d'une application web permettant l'exécution et la gestion de modèles de deep learning sur des données ECG et de génération de rapport pour un meilleur traitement des ECG.
 
 ---
 
